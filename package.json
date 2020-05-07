@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "hellojs": "^1.18.4",
+    "html-react-parser": "^0.10.3",
     "qs": "^6.9.3",
     "querystring": "^0.2.0",
     "react": "^16.13.1",
@@ -16,11 +17,14 @@
     "react-axios": "^2.0.3",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
+    "react-html-converter": "^0.3.2",
+    "react-html-parser": "^2.0.2",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "2.1.8",
     "react-spinners": "^0.8.3",
-    "react-tabs": "^3.1.0"
+    "react-tabs": "^3.1.0",
+    "string-strip-html": "^4.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

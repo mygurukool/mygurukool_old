@@ -2,6 +2,8 @@
   text-align: center;
 }*/
 
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;700&display=swap');
+ul li { display:block; line-height: 35px }
 .error {color:red; font-size:12px;}
 .App .logo {
   text-align: left;
