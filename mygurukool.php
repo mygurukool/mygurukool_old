@@ -26,65 +26,27 @@ $dom = new DOMDocument();
 
 @$dom->loadHTML($result->data);
 //$dom->loadHTML($result->data);
-?>
-
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;700&display=swap" rel="stylesheet">
-<!-- Bootstrap core CSS -->
-
-<link href="css/all.min.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">
-<div class="card-body">
-	<div class="row">
-		<div class="col-12">
-		<button type="button" class="btn btn-submit turnin"><i class="fas fa-check"></i> Turn In</button>
-		</div>
-		<div class="card-header col-12">
-			<ul>
-<?php    
+   
 $pdf_youtube_link = '';
+$array = [];
+$array['instructions'] = '';
+$instructions = '';
 foreach ($dom->getElementsByTagName('p') as $item) {
-?>
-	
-			<li>
-			<?php
-				if(isset($item->firstChild->tagName) && $item->firstChild->tagName !== 'a') {
-					echo $item->nodeValue;
-				}
-			?>
-			</li>
-		
-		<?php
-			if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
-				$pdf_youtube_link = $item->firstChild;
-			}
-		?>
-		
-
-<?php
+	if(isset($item->firstChild->tagName) && $item->firstChild->tagName !== 'a') {
+						$instructions.= "<li>".$item->nodeValue."</li>";
+	}
+	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
+		$pdf_youtube_link = $item->firstChild;
+	}
 }
-?>	
-			</ul>
-		</div>
-<div class="col-12" style="margin-top:5px">
-	
-	<?php
-		foreach($pdf_youtube_link->attributes as $attr){
-			if(strpos($attr->value,"youtu")!== false){
-	?>
-			<iframe width="50%" height="150" src="<?php echo $attr->value?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
-	<?php
-			}
-			else {
-	?>
-		<h3><?php echo $pdf_youtube_link->nodeValue?> 	<a href="<?php echo $attr->value?>" target="_blank" download><i class="fas fa-download"></i>Download</a><a href="#?" class="btn btn-primary" style="float:right" onClick={this.handleSubmitClick}>Submit</a></h3>
-	<?php
-			}
-		}
-	?>
-	
-		
-	
-</div>
-	
-	</div>
-</div>
+$array['instructions'] = $instructions;
+foreach($pdf_youtube_link->attributes as $attr){
+	if(strpos($attr->value,"youtu")!== false){
+		$array['youtubelink'] = $attr->value;
+	}
+	else {
+		$array['pdflink'] = $attr->value;
+	}
+	$array['pdfname'] = $pdf_youtube_link->nodeValue;
+}	
+echo json_encode($array);
