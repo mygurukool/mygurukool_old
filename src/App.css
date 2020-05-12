@@ -209,7 +209,10 @@ h2 small{font-size: 16px;}
   border-top-right-radius: 0;
 }
 
-
+.pdflink {
+  color: #fff;
+  text-transform: uppercase;
+}
 
 
 

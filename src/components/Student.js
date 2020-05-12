@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import '..//App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "./Header";
+import FileUpload from "./FileUpload";
 import axios from 'axios';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -50,14 +51,16 @@ export default class Student extends Component {
 	      exercise : '',
 	      exercisedata:'',
 	      isLoading: false,
+	      formUpload:''
 	    };
-	    this.handleSubmitClick = this.handleSubmitClick.bind(this)
+
+	    this.handleSubmitClick = this.handleSubmitClick.bind(this);
 	  
 	}
 	componentDidMount() {
 	 	this.state.isLoading = true;
 
-	 	localStorage.setItem('token','eyJ0eXAiOiJKV1QiLCJub25jZSI6ImpqN3pDQkdKVXZGLUhueFlhMWVZZkp6TEcyNlNjZHhSNUFYZHJuRjZGSnMiLCJhbGciOiJSUzI1NiIsIng1dCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSIsImtpZCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xNzVjZjE0YS0xOGRhLTQwNGYtOTcwMy04NjNlOGQ4Y2FlNDcvIiwiaWF0IjoxNTg4ODU3NjUyLCJuYmYiOjE1ODg4NTc2NTIsImV4cCI6MTU4ODg2MTU1MiwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFVUUF1LzhQQUFBQWdnWkJibk1wOXpuK1BtY29VaDJ1Rm42eGZ5cVk2NDNpMmVCbWFKcmgvOHJ4M0wrRCthZ04vZ2RKUmdzbjIrODN2QnZ4aG1vaXF3eDRQOTRvVlBHVlZBPT0iLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6Im15T25lbm90ZUFjY2Vzc0FwcCIsImFwcGlkIjoiMWY0ZGRlZmMtZDg0OS00ZjMwLWE0MTAtNzMyOTdlZDk4NDIyIiwiYXBwaWRhY3IiOiIwIiwiaXBhZGRyIjoiMTgzLjgzLjY3LjE5NyIsIm5hbWUiOiJNeUd1cnVLb29sIERldmVsb3BlciIsIm9pZCI6IjU1MGU0MjJiLThmZmUtNGMzMS1hMGY1LTY4YzRjODQzMmYyNCIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwMEI5RjFEQ0UyIiwic2NwIjoiTm90ZXMuUmVhZC5BbGwgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzaWduaW5fc3RhdGUiOlsia21zaSJdLCJzdWIiOiJYaHBWa0pfQjZ0QkhfWkZmMGZya3lmQVNVMzBzRXJCRFRMRU0tMU8wREcwIiwidGlkIjoiMTc1Y2YxNGEtMThkYS00MDRmLTk3MDMtODYzZThkOGNhZTQ3IiwidW5pcXVlX25hbWUiOiJkZXZAbXlndXJ1a29vbC5vbm1pY3Jvc29mdC5jb20iLCJ1cG4iOiJkZXZAbXlndXJ1a29vbC5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiItT211OFVpOUsweUFPa2pyVGRFYkFBIiwidmVyIjoiMS4wIiwieG1zX3N0Ijp7InN1YiI6InpoaEtya2NFVWJQdHVnVWlOSTFoSFprSW9UMFJWbV8wT3BueS1xUDNxV3MifSwieG1zX3RjZHQiOjE1ODc4Mjg0ODJ9.LUT0Ye5tBSqJbKVatMcVUZMGb-AsUTpVnrW1ARgc4_-1IBfgGPrDYENPEoMW8bMI9zjsVxP4ZbMJ0cdnKQhc5y7LkUhlhKCkKH_mz1skpEjTTahvtBbfxx7ez02kZeEZjTIbc4fwEZWYGpQ92D5p5zJ6pn2xNv2Xzbj15P8STFCOkQCg4LMRbcdSFkZu70WLfBLei8cOEdaN-q1yjbCx16nevZ_q98SVfrrgfEpA3Bw2_J1Zpes7nappJjMch-9NN1okVwW4WasiyyaGq774uM5aOrFYlEvX7bqU4-0Hl82UDfubOGtd5J8K6JZ0obD3fN798H5dKdWneGvRgOAUPw');
+	 	localStorage.setItem('token','eyJ0eXAiOiJKV1QiLCJub25jZSI6InY3SDZpQ2VEc3N1RVFpZWplOFN6OVZ2ZUhhMUlRZkZRbTFvNjVpb2lZUzAiLCJhbGciOiJSUzI1NiIsIng1dCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSIsImtpZCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8xNzVjZjE0YS0xOGRhLTQwNGYtOTcwMy04NjNlOGQ4Y2FlNDcvIiwiaWF0IjoxNTg5Mjk0MzA4LCJuYmYiOjE1ODkyOTQzMDgsImV4cCI6MTU4OTI5ODIwOCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFVUUF1LzhQQUFBQVJTZzA0eWpZR1lJSG1SOUNXMVpmVTl0M1cwWTE2aXJvTjk2bUkxQkZQWEdUS1h5WmdlVEw2VGZMd1FoQ2JQMnc5czBvVEwxajBtYlpzM1FDYXVFRDdBPT0iLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6Im15T25lbm90ZUFjY2Vzc0FwcCIsImFwcGlkIjoiMWY0ZGRlZmMtZDg0OS00ZjMwLWE0MTAtNzMyOTdlZDk4NDIyIiwiYXBwaWRhY3IiOiIwIiwiaXBhZGRyIjoiMTgzLjgzLjcwLjIwMCIsIm5hbWUiOiJNeUd1cnVLb29sIERldmVsb3BlciIsIm9pZCI6IjU1MGU0MjJiLThmZmUtNGMzMS1hMGY1LTY4YzRjODQzMmYyNCIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwMEI5RjFEQ0UyIiwic2NwIjoiRmlsZXMuUmVhZFdyaXRlLkFsbCBOb3Rlcy5SZWFkLkFsbCBwcm9maWxlIG9wZW5pZCBlbWFpbCIsInNpZ25pbl9zdGF0ZSI6WyJrbXNpIl0sInN1YiI6IlhocFZrSl9CNnRCSF9aRmYwZnJreWZBU1UzMHNFckJEVExFTS0xTzBERzAiLCJ0aWQiOiIxNzVjZjE0YS0xOGRhLTQwNGYtOTcwMy04NjNlOGQ4Y2FlNDciLCJ1bmlxdWVfbmFtZSI6ImRldkBteWd1cnVrb29sLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImRldkBteWd1cnVrb29sLm9ubWljcm9zb2Z0LmNvbSIsInV0aSI6IlkzN2NiWWtrQWtTOGFubWFlNDJaQUEiLCJ2ZXIiOiIxLjAiLCJ4bXNfc3QiOnsic3ViIjoiemhoS3JrY0VVYlB0dWdVaU5JMWhIWmtJb1QwUlZtXzBPcG55LXFQM3FXcyJ9LCJ4bXNfdGNkdCI6MTU4NzgyODQ4Mn0.ImIewyY1i56fTmyMnuMUBzM3TBaVMXU4_kYSMD3_pLcjDElCoL3hNEF2EDdYiUYWji0DdgzDSjpdt0DbycGgm8QRdWPFfxdG-i4xXCB5ij12FZRQyZhUHZbqNCiNn0MvOVBIiRmsy6hDcuE32OUi3tVOdX-9NyEbpgWdetSk56AO6JRewBNuo0GmG4nVxWZIIip4uc1lgP1qx_6dC_9ahertSEW01P55L0IrS1lB2R3Mu4Lf22T8TrN6KhsUaN5x1ka_dggaeGchEQkrSYIf8pNOvDt0YvYXjwxM8QL6qX70pVekiTB-_wTbwT82cbxFZLp4jLro5N3dAbNaNK8zQQ');
 	 	// axios.defaults.headers.common['Authorization'] = "Bearer " +localStorage.getItem('userDetails');
 	 	const config = {
 		    headers: { Authorization: `Bearer ${localStorage.getItem('userDetails')}` }
@@ -93,7 +96,7 @@ export default class Student extends Component {
     }
 
     handleSubmitClick = (event) => {
-    	alert("ellpo")
+    	this.setState({ formUpload: <FileUpload/>})
     }
 
     handleClick = (event) => {
@@ -117,7 +120,7 @@ export default class Student extends Component {
 							    // password: this.state.password,
 							}).then(res => {
 					  			this.state.exercise.value[i].content = res.data;
-					  			console.log(res)
+					  			console.log(this.state.exercise.value[i].content.instructions)
 					  			this.setState({ exercisedata: this.state.exercise });
 					  		})
 					// 		this.state.exercise.value[i].content = response.data;
@@ -197,8 +200,48 @@ export default class Student extends Component {
 						                        }  
 						                    </AccordionItemButton>
 						                </AccordionItemHeading >
-						                <AccordionItemPanel dangerouslySetInnerHTML={{ __html: exe.content }}>
+						                <AccordionItemPanel>
+						                	<div className="card-body">
+												<div className="row">
+													<div className="col-12">
+													<button type="button" className="btn btn-submit turnin"><i class="fas fa-check"></i> Turn In</button>
+													</div>
+													<div className="card-header col-12">
+														<ul dangerouslySetInnerHTML={{ __html: exe.content ? exe.content.instructions : ''  }}>
+															
+														</ul>
+													</div>
+													<table  class="table">
+														<tr className="teacher-excer col-12">
+															<td className="pdflink">
+																{
+																	exe.content && exe.content.pdfname ? exe.content.pdfname : ''
+																}
+															</td>
+															<td>
+																{
+																	exe.content && exe.content.pdflink ? 
+																	<a href={exe.content.pdflink} target='_blank'><i class="fas fa-download"></i> Download</a>
+																	: ''
+																}
+															</td>
+															<td>
+																<a href="#?" onClick={this.handleSubmitClick} className="btn btn-primary">Submit</a>
+															</td>
 
+														</tr>
+														<tr>
+															<td colspan='3'>
+																<div class="card card-body">
+																    <div class="custom-file">
+																	  { this.state.formUpload}
+																	</div>
+																  </div>
+															</td>
+														</tr>
+													</table>
+												</div>
+											</div>
 						                </AccordionItemPanel>
 				 					</AccordionItem>
 				 				)
