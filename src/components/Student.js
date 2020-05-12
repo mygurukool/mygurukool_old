@@ -16,6 +16,12 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Icons from "@fortawesome/free-solid-svg-icons";
+
+import "@fortawesome/fontawesome-free/css/all.css";
+
 // Demo styles, see 'Styles' section below for some notes on use.
 import "react-accessible-accordion/dist/fancy-example.css";
 import stripHtml from "string-strip-html";
@@ -114,7 +120,7 @@ export default class Student extends Component {
                 )
                 .then((response) => {
                   this.setState({ exercise: response.data });
-                  console.log(this.state.exercise);
+                  // console.log(this.state.exercise);
                   this.setState({ exercisedata: this.state.exercise });
                 });
             }
@@ -160,23 +166,9 @@ export default class Student extends Component {
                     })
                     .then((res) => {
                       this.state.exercise.value[i].content = res.data;
-                      console.log(
-                        this.state.exercise.value[i].content.instructions
-                      );
                       this.setState({ exercisedata: this.state.exercise });
+                      console.log(this.state.exercisedata);
                     });
-                  // 		this.state.exercise.value[i].content = response.data;
-
-                  //
-
-                  // 		// console.log(stripHtml(this.state.exercise.value[i].content));
-                  // 		// parse(this.state.exercise.value[i].content, {
-                  // 		//   replace: function(domNode) {
-                  // 		//     // console.log(domNode, { depth: null });
-                  // 		//     c
-                  // 		//   }
-                  // 		// });
-                  // 		console.log(stripHtml(this.state.exercise.value[i].content, {cb} ));
                 })
             );
         }
@@ -236,14 +228,23 @@ export default class Student extends Component {
               color={"#D77F36"}
               loading={this.state.isLoading}
             />
-            <i class="fas fa-download"></i>
+
             <Accordion>
               {this.state.exercisedata &&
                 this.state.exercisedata.value.map((exe, i) => (
                   <AccordionItem>
                     <AccordionItemHeading>
                       <AccordionItemButton>
-                        {exe.title ? exe.title : "No Exercise Data"}
+                        <div className="row">
+                          <div className="float-left col-12">
+                            {exe.title ? exe.title : "No Exercise Data"}
+                            <small class="text-muted float-right">
+                              {exe.content && exe.content.submissionDate
+                                ? exe.content.submissionDate
+                                : ""}
+                            </small>
+                          </div>
+                        </div>
                       </AccordionItemButton>
                     </AccordionItemHeading>
                     <AccordionItemPanel>
@@ -276,7 +277,16 @@ export default class Student extends Component {
                               <td>
                                 {exe.content && exe.content.pdflink ? (
                                   <a href={exe.content.pdflink} target="_blank">
-                                    <i class="fas fa-download"></i> Download
+                                    <i class="fas fa-eye"></i>
+                                  </a>
+                                ) : (
+                                  ""
+                                )}
+                              </td>
+                              <td>
+                                {exe.content && exe.content.pdflink ? (
+                                  <a href={exe.content.pdflink} target="_blank">
+                                    <i class="fas fa-download"></i>
                                   </a>
                                 ) : (
                                   ""
@@ -302,6 +312,23 @@ export default class Student extends Component {
                               </td>
                             </tr>
                           </table>
+                          <div>
+                            <td scope="row">
+                              <button
+                                data-toggle="modal"
+                                data-target="#exampleModalCenter"
+                              >
+                                <iframe
+                                  width="50%"
+                                  height="150"
+                                  src="https://youtu.be/TBbT-ZXPUCY"
+                                  frameborder="0"
+                                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                  allowfullscreen
+                                ></iframe>
+                              </button>
+                            </td>
+                          </div>
                         </div>
                       </div>
                     </AccordionItemPanel>

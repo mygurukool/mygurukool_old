@@ -31,22 +31,29 @@ $pdf_youtube_link = '';
 $array = [];
 $array['instructions'] = '';
 $instructions = '';
+$submissionDate = '';
 foreach ($dom->getElementsByTagName('p') as $item) {
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName !== 'a') {
-						$instructions.= "<li>".$item->nodeValue."</li>";
+		if (stripos($item->nodeValue, 'date') !== false){
+			$submissionDate = $item->nodeValue;
+		} else {
+			$instructions.= "<li>".$item->nodeValue."</li>";
+		}						
 	}
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
 		$pdf_youtube_link = $item->firstChild;
+		foreach($pdf_youtube_link->attributes as $attr){
+			if(strpos($attr->value,"youtu")!== false){
+				$array['youtubelink'] = $attr->value;
+			}	
+			else {
+				$array['pdflink'] = $attr->value;
+				$array['pdfname'] = $pdf_youtube_link->nodeValue;
+			}
+		}
 	}
 }
 $array['instructions'] = $instructions;
-foreach($pdf_youtube_link->attributes as $attr){
-	if(strpos($attr->value,"youtu")!== false){
-		$array['youtubelink'] = $attr->value;
-	}
-	else {
-		$array['pdflink'] = $attr->value;
-	}
-	$array['pdfname'] = $pdf_youtube_link->nodeValue;
-}	
+$array['submissionDate'] = $submissionDate;
+
 echo json_encode($array);
