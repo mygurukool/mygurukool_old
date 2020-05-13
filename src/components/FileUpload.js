@@ -40,7 +40,20 @@ export default class FileUpload extends Component {
   render() {
     return (
       <Fragment>
-        <input
+        <div class="card card-body">
+          <div class="custom-file">
+            <input
+              type="file"
+              class="custom-file-input"
+              id="customFile"
+              onChange={this.handleFileChange}
+            />
+            <label className="custom-file-label">Choose file</label>
+            {this.state.file ? this.state.file : ""}
+          </div>
+        </div>
+
+        {/* <input
           type="file"
           class="custom-file-input"
           id="customFile"
@@ -49,7 +62,7 @@ export default class FileUpload extends Component {
         <label className="custom-file-label">Choose file</label>
         {this.state.file ? this.state.file : ""}
         <button type="button">Cancel</button>
-        <button type="button">Upload</button>
+        <button type="button">Upload</button> */}
       </Fragment>
     );
   }

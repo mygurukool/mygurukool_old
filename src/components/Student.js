@@ -57,6 +57,7 @@ export default class Student extends Component {
       exercisedata: "",
       isLoading: false,
       formUpload: "",
+      currentView: "",
     };
 
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
@@ -137,6 +138,7 @@ export default class Student extends Component {
   };
 
   handleClick = (event) => {
+    this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
     // alert(event.target.id);
     axios
@@ -211,7 +213,11 @@ export default class Student extends Component {
                     this.state.sections.value.map((key, i) => (
                       <li className="nav-item">
                         <a
-                          className="nav-link active"
+                          className={
+                            this.state.currentView == key.displayName
+                              ? "active nav-link"
+                              : "nav-link"
+                          }
                           id={key.id}
                           data-toggle="pill"
                           href="#?"
@@ -281,7 +287,7 @@ export default class Student extends Component {
                               <td>
                                 {exe.content && exe.content.pdflink ? (
                                   <a href={exe.content.pdflink} target="_blank">
-                                    <i class="fas fa-eye">eze</i>
+                                    <i class="fas fa-eye"></i>
                                   </a>
                                 ) : (
                                   ""
@@ -307,13 +313,7 @@ export default class Student extends Component {
                               </td>
                             </tr>
                             <tr>
-                              <td colspan="3">
-                                <div class="card card-body">
-                                  <div class="custom-file">
-                                    {this.state.formUpload}
-                                  </div>
-                                </div>
-                              </td>
+                              <td colspan="3">{this.state.formUpload}</td>
                             </tr>
                           </table>
                           {/* <div>
