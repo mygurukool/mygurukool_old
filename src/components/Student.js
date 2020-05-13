@@ -94,7 +94,10 @@ export default class Student extends Component {
         this.setState({
           displayName: this.state.studentData.value[0].displayName,
         });
-		localStorage.setItem('studentName',this.state.studentData.value[0].displayName);
+        localStorage.setItem(
+          "studentName",
+          this.state.studentData.value[0].displayName
+        );
         axios
           .get(
             `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`,
@@ -278,7 +281,7 @@ export default class Student extends Component {
                               <td>
                                 {exe.content && exe.content.pdflink ? (
                                   <a href={exe.content.pdflink} target="_blank">
-                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-eye">eze</i>
                                   </a>
                                 ) : (
                                   ""
@@ -313,7 +316,7 @@ export default class Student extends Component {
                               </td>
                             </tr>
                           </table>
-                          <div>
+                          {/* <div>
                             <td scope="row">
                               <button
                                 data-toggle="modal"
@@ -329,7 +332,7 @@ export default class Student extends Component {
                                 ></iframe>
                               </button>
                             </td>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </AccordionItemPanel>
