@@ -15,6 +15,7 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
+import ModalVideo from "react-modal-video";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -58,9 +59,11 @@ export default class Student extends Component {
       isLoading: false,
       formUpload: "",
       currentView: "",
+      isOpen: false,
     };
 
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    this.openModal = this.openModal.bind(this);
   }
   componentDidMount() {
     if (
@@ -132,12 +135,15 @@ export default class Student extends Component {
           });
       });
   }
-  
+
+  openModal() {
+    this.setState({ isOpen: true });
+  }
 
   handleSubmitClick = (event) => {
-    this.setState({ formUpload: <FileUpload status_open = "false"/> });
+    this.setState({ formUpload: <FileUpload status_open="false" /> });
   };
-  
+
   handleClick = (event) => {
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
@@ -317,23 +323,17 @@ export default class Student extends Component {
                               <td colspan="3">{this.state.formUpload}</td>
                             </tr>
                           </table>
-                          {/* <div>
-                            <td scope="row">
-                              <button
-                                data-toggle="modal"
-                                data-target="#exampleModalCenter"
-                              >
-                                <iframe
-                                  width="50%"
-                                  height="150"
-                                  src="https://youtu.be/TBbT-ZXPUCY"
-                                  frameborder="0"
-                                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                                  allowfullscreen
-                                ></iframe>
-                              </button>
-                            </td>
-                          </div> */}
+                          <div>
+                            <ModalVideo
+                              channel="youtube"
+                              isOpen={this.state.isOpen}
+                              videoId="TBbT-ZXPUCY" //"L61p2uyiMSo"
+                              onClose={() => this.setState({ isOpen: false })}
+                            />
+                            <button onClick={this.openModal}>
+                              <i class="fas fa-video"></i> Explanation Video
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </AccordionItemPanel>
