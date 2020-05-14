@@ -132,11 +132,12 @@ export default class Student extends Component {
           });
       });
   }
+  
 
   handleSubmitClick = (event) => {
-    this.setState({ formUpload: <FileUpload /> });
+    this.setState({ formUpload: <FileUpload status_open = "false"/> });
   };
-
+  
   handleClick = (event) => {
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;

@@ -6,16 +6,31 @@ import axios from "axios";
 export default class FileUpload extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       file: "",
+      fileUploaded: '',
+      hideFileUpload:false,
     };
-
     this.handleFileChange = this.handleFileChange.bind(this);
+    this.cancelClick = this.cancelClick.bind(this);
   }
 
   handleFileChange = (event) => {
     this.file = event.target.files[0];
+    this.setState({
+      file: this.file.name
+    });
+    document.getElementById("choose_text").innerHTML = this.file.name.toUpperCase();
+  };
+
+  cancelClick = (event) => {
+    this.setState({
+      hideFileUpload : true
+    })
+  };
+
+  handleClick = (event) => {
     const formData = new FormData();
     formData.append(this.file.name, this.file);
     axios
@@ -31,27 +46,42 @@ export default class FileUpload extends Component {
       )
       .then((response) => {
         console.log(response.statusText);
+        this.fileUploaded = true;
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
   render() {
+    
     return (
       <Fragment>
-        <div class="card card-body">
-          <div class="custom-file">
-            <input
-              type="file"
-              class="custom-file-input"
-              id="customFile"
-              onChange={this.handleFileChange}
-            />
-            <label className="custom-file-label">Choose file</label>
-            {this.state.file ? this.state.file : ""}
+        {
+          this.state.hideFileUpload == false
+          ?
+          <div class="card card-body fileblock">
+            <div class="custom-file">
+              <input
+                type="file"
+                class="custom-file-input"
+                id="customFile"
+                onChange={this.handleFileChange}
+              />
+              <label id="choose_text" className="custom-file-label">Choose file</label>
+          
+            </div>
+            <div className="form-group">
+            <br/>
+              <button type="reset" onClick={this.cancelClick} className="btn btn-secondary">Cancel</button> <button type="button" className="btn btn-success" onClick={this.handleClick}>Upload</button>
+            </div>
+            { 
+              this.state.file ? this.state.file : '' 
+            }
           </div>
-        </div>
+          : 
+          ''
+        }
 
         {/* <input
           type="file"
