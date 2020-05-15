@@ -145,7 +145,7 @@ export default class Student extends Component {
     this.state.vidId = vidLink.split(/[\/]+/).pop();
     //should the url has "=" before the vid id
     this.state.vidId = vidLink.split(/[\=]+/).pop();
-    alert(this.state.vidId);
+    // alert(this.state.vidId);
     return (
       <div>
         <ModalVideo
