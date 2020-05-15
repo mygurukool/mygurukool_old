@@ -61,11 +61,13 @@ export default class Student extends Component {
       currentView: "",
       isOpen: false,
       vidId: "",
+      exerciseTitle: "",
     };
 
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
     this.openModal = this.openModal.bind(this);
     this.buildVideoComponent = this.buildVideoComponent.bind(this);
+    this.axiosCall = this.axiosCall.bind(this);
   }
   componentDidMount() {
     if (
@@ -73,81 +75,56 @@ export default class Student extends Component {
       "params" in this.props.match &&
       "token" in this.props.match.params
     ) {
-      // console.log(this.props.match.params.token);
       localStorage.setItem("token", this.props.match.params.token);
     }
     this.state.isLoading = true;
 
-    // axios.defaults.headers.common['Authorization'] = "Bearer " +localStorage.getItem('userDetails');
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("userDetails")}`,
-      },
-    };
-
-    const bodyParameters = {};
-
-    axios
-      .get(
-        "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups",
-        {
-          params: {},
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
-      .then((response) => {
-        this.setState({ studentData: response.data });
-        this.setState({
-          displayName: this.state.studentData.value[0].displayName,
-        });
-        localStorage.setItem(
-          "studentName",
-          this.state.studentData.value[0].displayName
-        );
-        axios
-          .get(
-            `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`,
-            {
-              params: {},
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          )
-          .then((response) => {
-            this.state.isLoading = false;
-            this.setState({ sections: response.data });
-            {
-              axios
-                .get(
-                  `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`,
-                  {
-                    params: {},
-                    headers: {
-                      Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                  }
-                )
-                .then((response) => {
-                  this.setState({ exercise: response.data });
-                  // console.log(this.state.exercise);
-                  this.setState({ exercisedata: this.state.exercise });
-                });
-            }
-          });
+    this.axiosCall(
+      "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
+    ).then((response) => {
+      this.setState({ studentData: response.data });
+      this.setState({
+        displayName: this.state.studentData.value[0].displayName,
       });
+      localStorage.setItem(
+        "studentName",
+        this.state.studentData.value[0].displayName
+      );
+      this.axiosCall(
+        `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
+      ).then((response) => {
+        this.state.isLoading = false;
+        this.setState({ sections: response.data });
+        {
+          this.axiosCall(
+            `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
+          ).then((response) => {
+            this.setState({ exercise: response.data });
+            // console.log(this.state.exercise);
+            this.setState({ exercisedata: this.state.exercise });
+          });
+        }
+      });
+    });
   }
 
-  buildVideoComponent(vidLink) {
+  axiosCall(url) {
+    return axios.get(url, {
+      params: {},
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+  }
+
+  buildVideoComponent(componentId, vidLink) {
     //TODO: function should also extract video channel eg: youtube, youku, etc
 
     //exctract vid Id
     this.state.vidId = vidLink.split(/[\/]+/).pop();
     //should the url has "=" before the vid id
     this.state.vidId = vidLink.split(/[\=]+/).pop();
-    // alert(this.state.vidId);
+
     return (
-      <div>
+      <div id={componentId}>
         <ModalVideo
           channel="youtube"
           isOpen={this.state.isOpen}
@@ -172,45 +149,28 @@ export default class Student extends Component {
   handleClick = (event) => {
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
-    // alert(event.target.id);
-    axios
-      .get(
-        `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${event.target.id}/pages`,
-
-        {
-          params: {},
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
-      .then((response) => {
-        this.state.isLoading = false;
-        this.setState({ exercise: response.data });
-        {
-          this.state.exercise &&
-            this.state.exercise.value.map((exe, i) =>
-              // console.log(exe.contentUrl)
+    this.axiosCall(
+      `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${event.target.id}/pages`
+    ).then((response) => {
+      this.state.isLoading = false;
+      this.setState({ exercise: response.data });
+      {
+        this.state.exercise &&
+          this.state.exercise.value.map((exe, i) =>
+            this.axiosCall(exe.contentUrl).then((response) => {
               axios
-                .get(exe.contentUrl, {
-                  params: {},
-                  headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                  },
+                .post("http://localhost/mygurukool.php", {
+                  data: response.data,
                 })
-                .then((response) => {
-                  axios
-                    .post("http://localhost/mygurukool.php", {
-                      data: response.data,
-                      // password: this.state.password,
-                    })
-                    .then((res) => {
-                      this.state.exercise.value[i].content = res.data;
-                      this.setState({ exercisedata: this.state.exercise });
-                      console.log(this.state.exercisedata);
-                    });
-                })
-            );
-        }
-      });
+                .then((res) => {
+                  this.state.exercise.value[i].content = res.data;
+                  this.setState({ exercisedata: this.state.exercise });
+                  console.log(this.state.exercisedata);
+                });
+            })
+          );
+      }
+    });
     return false;
   };
 
@@ -279,7 +239,9 @@ export default class Student extends Component {
                       <AccordionItemButton>
                         <div className="row">
                           <div className="float-left col-12">
-                            {exe.title ? exe.title : "No Exercise Data"}
+                            {exe.title
+                              ? (this.state.exerciseTitle = exe.title)
+                              : "No Exercise Data"}
                             <small class="text-muted float-right">
                               {exe.content && exe.content.submissionDate
                                 ? exe.content.submissionDate
@@ -349,7 +311,10 @@ export default class Student extends Component {
                             </tr>
                           </table>
                           {exe.content && exe.content.youtubelink
-                            ? this.buildVideoComponent(exe.content.youtubelink)
+                            ? this.buildVideoComponent(
+                                this.state.exerciseTitle + "_vid",
+                                exe.content.youtubelink
+                              )
                             : ""}
                         </div>
                       </div>
