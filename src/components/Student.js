@@ -60,10 +60,12 @@ export default class Student extends Component {
       formUpload: "",
       currentView: "",
       isOpen: false,
+      vidId: "",
     };
 
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
     this.openModal = this.openModal.bind(this);
+    this.buildVideoComponent = this.buildVideoComponent.bind(this);
   }
   componentDidMount() {
     if (
@@ -134,6 +136,29 @@ export default class Student extends Component {
             }
           });
       });
+  }
+
+  buildVideoComponent(vidLink) {
+    //TODO: function should also extract video channel eg: youtube, youku, etc
+
+    //exctract vid Id
+    this.state.vidId = vidLink.split(/[\/]+/).pop();
+    //should the url has "=" before the vid id
+    this.state.vidId = vidLink.split(/[\=]+/).pop();
+    alert(this.state.vidId);
+    return (
+      <div>
+        <ModalVideo
+          channel="youtube"
+          isOpen={this.state.isOpen}
+          videoId={this.state.vidId}
+          onClose={() => this.setState({ isOpen: false })}
+        />
+        <button onClick={this.openModal}>
+          <i class="fas fa-video"></i> Explanation Video
+        </button>
+      </div>
+    );
   }
 
   openModal() {
@@ -323,17 +348,9 @@ export default class Student extends Component {
                               <td colspan="3">{this.state.formUpload}</td>
                             </tr>
                           </table>
-                          <div>
-                            <ModalVideo
-                              channel="youtube"
-                              isOpen={this.state.isOpen}
-                              videoId="TBbT-ZXPUCY" //"L61p2uyiMSo"
-                              onClose={() => this.setState({ isOpen: false })}
-                            />
-                            <button onClick={this.openModal}>
-                              <i class="fas fa-video"></i> Explanation Video
-                            </button>
-                          </div>
+                          {exe.content && exe.content.youtubelink
+                            ? this.buildVideoComponent(exe.content.youtubelink)
+                            : ""}
                         </div>
                       </div>
                     </AccordionItemPanel>
