@@ -89,7 +89,7 @@ export default class Home extends Component {
                 onClick={(e): void => {
                   e.preventDefault();
                   window.location.href =
-                    "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=1f4ddefc-d849-4f30-a410-73297ed98422&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%2Fauth.php&response_mode=query&scope=Notes.Read.All&state=202005101845";
+                    "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" + process.env.REACT_APP_CLIENT_ID + "&response_type=code&redirect_uri=" + process.env.REACT_APP_OAUTH_REDIRECT_URI + "&response_mode=query&scope=" + process.env.REACT_APP_OAUTH_SCOPES + "&prompt=consent&state=202005101845";
                 }}
               >
                 Login to the School App
