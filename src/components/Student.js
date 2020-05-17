@@ -159,7 +159,7 @@ export default class Student extends Component {
           this.state.exercise.value.map((exe, i) =>
             this.axiosCall(exe.contentUrl).then((response) => {
               axios
-                .post("https://" + process.env.REACT_APP_SERVER + "/mygurukool.php", {
+                .post(process.env.REACT_APP_WEBSERVER + "/mygurukool.php", {
                   data: response.data,
                 })
                 .then((res) => {
