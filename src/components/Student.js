@@ -64,7 +64,6 @@ export default class Student extends Component {
       exerciseTitle: "",
     };
 
-    this.handleSubmitClick = this.handleSubmitClick.bind(this);
     this.openModal = this.openModal.bind(this);
     this.buildVideoComponent = this.buildVideoComponent.bind(this);
     this.axiosCall = this.axiosCall.bind(this);
@@ -132,7 +131,7 @@ export default class Student extends Component {
           onClose={() => this.setState({ isOpen: false })}
         />
         <button onClick={this.openModal}>
-          <i class="fas fa-video"></i> Explanation Video
+          <i class="fas fa-video"></i> Im Video, Click me!!
         </button>
       </div>
     );
@@ -141,10 +140,6 @@ export default class Student extends Component {
   openModal() {
     this.setState({ isOpen: true });
   }
-
-  handleSubmitClick = (event) => {
-    this.setState({ formUpload: <FileUpload status_open="false" /> });
-  };
 
   handleClick = (event) => {
     this.setState({ currentView: event.target.text });
@@ -272,40 +267,12 @@ export default class Student extends Component {
                             ></ul>
                           </div>
                           <table class="table">
-                            <tr className="teacher-excer col-12">
-                              <td className="pdflink">
-                                {exe.content && exe.content.pdfname
-                                  ? exe.content.pdfname
-                                  : ""}
-                              </td>
-                              <td>
-                                {exe.content && exe.content.pdflink ? (
-                                  <a href={exe.content.pdflink} target="_blank">
-                                    <i class="fas fa-eye"></i>
-                                  </a>
-                                ) : (
-                                  ""
-                                )}
-                              </td>
-                              <td>
-                                {exe.content && exe.content.pdflink ? (
-                                  <a href={exe.content.pdflink} target="_blank">
-                                    <i class="fas fa-download"></i>
-                                  </a>
-                                ) : (
-                                  ""
-                                )}
-                              </td>
-                              <td>
-                                <a
-                                  href="#?"
-                                  onClick={this.handleSubmitClick}
-                                  className="btn btn-primary"
-                                >
-                                  Submit
-                                </a>
-                              </td>
-                            </tr>
+                            {exe.content ? (
+                              <FileUpload exerciesDetails={exe.content} />
+                            ) : (
+                              ""
+                            )}
+
                             <tr>
                               <td colspan="3">{this.state.formUpload}</td>
                             </tr>

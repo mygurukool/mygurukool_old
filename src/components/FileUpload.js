@@ -78,7 +78,7 @@ export default class FileUpload extends Component {
             <td>
               {this.state.exercisePdfLink ? (
                 <a href={this.state.exercisePdfLink} target="_blank">
-                  <i class="fas fa-eye"></i>
+                  <i class="fas fa-eye fa-3x"></i>
                 </a>
               ) : (
                 ""
@@ -87,7 +87,7 @@ export default class FileUpload extends Component {
             <td>
               {this.state.exercisePdfLink ? (
                 <a href={this.state.exercisePdfLink} target="_blank">
-                  <i class="fas fa-download"></i>
+                  <i class="fas fa-download fa-2x"></i>
                 </a>
               ) : (
                 ""
@@ -99,7 +99,7 @@ export default class FileUpload extends Component {
                 onClick={this.handleSubmitClick}
                 className="btn btn-primary"
               >
-                Submit
+                <i class="fas fa-upload"></i> Submit
               </a>
             </td>
           </tr>
@@ -121,16 +121,16 @@ export default class FileUpload extends Component {
                 <button
                   type="reset"
                   onClick={this.cancelClick}
-                  className="btn btn-secondary"
+                  className="btn btn-danger"
                 >
-                  Cancel
-                </button>{" "}
+                  <i class="far fa-times-circle"></i> Cancel
+                </button>
                 <button
                   type="button"
                   className="btn btn-success"
                   onClick={this.handleClick}
                 >
-                  Upload
+                  <i class="fas fa-cloud-upload-alt"></i> Upload
                 </button>
               </div>
               {this.state.file ? this.state.file : ""}
