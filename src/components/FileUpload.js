@@ -6,28 +6,39 @@ import axios from "axios";
 export default class FileUpload extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       file: "",
-      fileUploaded: '',
-      hideFileUpload:false,
+      fileUploaded: "",
+      hideFileUpload: true,
+      exercisePdfName: props.exerciesDetails.pdfname,
+      exercisePdfLink: props.exerciesDetails.pdflink,
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
+    this.handleSubmitClick = this.handleSubmitClick.bind(this);
   }
 
   handleFileChange = (event) => {
     this.file = event.target.files[0];
     this.setState({
-      file: this.file.name
+      file: this.file.name,
     });
-    document.getElementById("choose_text").innerHTML = this.file.name.toUpperCase();
+    document.getElementById(
+      "choose_text"
+    ).innerHTML = this.file.name.toUpperCase();
   };
 
   cancelClick = (event) => {
     this.setState({
-      hideFileUpload : true
-    })
+      hideFileUpload: true,
+    });
+  };
+
+  handleSubmitClick = (event) => {
+    this.setState({
+      hideFileUpload: false,
+    });
   };
 
   handleClick = (event) => {
@@ -51,48 +62,83 @@ export default class FileUpload extends Component {
       .catch((error) => {
         console.log(error);
       });
-  }
+    this.setState({
+      hideFileUpload: true,
+    });
+  };
 
   render() {
-    
     return (
       <Fragment>
-        {
-          this.state.hideFileUpload == false
-          ?
-          <div class="card card-body fileblock">
-            <div class="custom-file">
-              <input
-                type="file"
-                class="custom-file-input"
-                id="customFile"
-                onChange={this.handleFileChange}
-              />
-              <label id="choose_text" className="custom-file-label">Choose file</label>
-          
+        <div>
+          <tr className="teacher-excer col-12">
+            <td className="pdflink">
+              {this.state.exercisePdfName ? this.state.exercisePdfName : ""}
+            </td>
+            <td>
+              {this.state.exercisePdfLink ? (
+                <a href={this.state.exercisePdfLink} target="_blank">
+                  <i class="fas fa-eye"></i>
+                </a>
+              ) : (
+                ""
+              )}
+            </td>
+            <td>
+              {this.state.exercisePdfLink ? (
+                <a href={this.state.exercisePdfLink} target="_blank">
+                  <i class="fas fa-download"></i>
+                </a>
+              ) : (
+                ""
+              )}
+            </td>
+            <td>
+              <a
+                href="#?"
+                onClick={this.handleSubmitClick}
+                className="btn btn-primary"
+              >
+                Submit
+              </a>
+            </td>
+          </tr>
+          {this.state.hideFileUpload == false ? (
+            <div class="card card-body fileblock">
+              <div class="custom-file">
+                <input
+                  type="file"
+                  class="custom-file-input"
+                  id="customFile"
+                  onChange={this.handleFileChange}
+                />
+                <label id="choose_text" className="custom-file-label">
+                  Choose file
+                </label>
+              </div>
+              <div className="form-group">
+                <br />
+                <button
+                  type="reset"
+                  onClick={this.cancelClick}
+                  className="btn btn-secondary"
+                >
+                  Cancel
+                </button>{" "}
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={this.handleClick}
+                >
+                  Upload
+                </button>
+              </div>
+              {this.state.file ? this.state.file : ""}
             </div>
-            <div className="form-group">
-            <br/>
-              <button type="reset" onClick={this.cancelClick} className="btn btn-secondary">Cancel</button> <button type="button" className="btn btn-success" onClick={this.handleClick}>Upload</button>
-            </div>
-            { 
-              this.state.file ? this.state.file : '' 
-            }
-          </div>
-          : 
-          ''
-        }
-
-        {/* <input
-          type="file"
-          class="custom-file-input"
-          id="customFile"
-          onChange={this.handleFileChange}
-        />
-        <label className="custom-file-label">Choose file</label>
-        {this.state.file ? this.state.file : ""}
-        <button type="button">Cancel</button>
-        <button type="button">Upload</button> */}
+          ) : (
+            ""
+          )}
+        </div>
       </Fragment>
     );
   }
