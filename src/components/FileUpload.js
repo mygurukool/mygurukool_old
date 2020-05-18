@@ -71,7 +71,7 @@ export default class FileUpload extends Component {
     return (
       <Fragment>
         <table class="col-12">
-          <tr className="teacher-excer col-12">
+          <tr className="teacher-excer-attention col-12">
             <td className="pdflink">
               {this.state.exercisePdfName ? this.state.exercisePdfName : ""}
             </td>

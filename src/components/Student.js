@@ -16,6 +16,8 @@ import {
   AccordionItemPanel,
 } from "react-accessible-accordion";
 import Video from "./Video";
+import maths from "./../assets/maths.gif";
+import maths2 from "./../assets/maths2.png";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -65,6 +67,7 @@ export default class Student extends Component {
     };
 
     this.axiosCall = this.axiosCall.bind(this);
+    this.displaySubjectIconByName = this.displaySubjectIconByName.bind(this);
   }
   componentDidMount() {
     if (
@@ -140,6 +143,15 @@ export default class Student extends Component {
     return false;
   };
 
+  displaySubjectIconByName(subjectName) {
+    if (subjectName === "Maths") {
+      return <img src={maths} className="subjectIcon" />;
+    } else if (subjectName === "German") {
+      return <img src={maths2} className="subjectIcon" />;
+    }
+    return "";
+  }
+
   render() {
     return (
       <Fragment>
@@ -149,6 +161,7 @@ export default class Student extends Component {
             <div className="col-12">
               <div className="alert alert-primary" role="alert">
                 <span className="badge badge-light">
+                  {/* Student name */}
                   {this.state.displayName}
                 </span>
                 <ul className="navbar-nav float-right">
@@ -181,7 +194,10 @@ export default class Student extends Component {
                           href="#?"
                           onClick={this.handleClick}
                         >
+                          {/* Exercise Name */}
                           {key.displayName}
+                          <br />
+                          {this.displaySubjectIconByName(key.displayName)}
                         </a>
                       </li>
                     ))}
