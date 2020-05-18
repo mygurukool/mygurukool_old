@@ -226,7 +226,7 @@ export default class Student extends Component {
               loading={this.state.isLoading}
             />
 
-            <Accordion>
+            <Accordion allowZeroExpanded={true}>
               {this.state.exercisedata &&
                 this.state.exercisedata.value.map((exe, i) => (
                   <AccordionItem>
