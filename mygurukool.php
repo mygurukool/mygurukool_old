@@ -26,7 +26,8 @@ $dom = new DOMDocument();
 
 @$dom->loadHTML($result->data);
 //$dom->loadHTML($result->data);
-$pdf_youtube_link = [];
+   
+$pdf_youtube_link = '';
 $array = [];
 $array['instructions'] = '';
 $instructions = '';
@@ -35,22 +36,17 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 						$instructions.= "<li>".$item->nodeValue."</li>";
 	}
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
-		$pdf_youtube_link[] = $item->firstChild;
+		$pdf_youtube_link = $item->firstChild;
 	}
 }
 $array['instructions'] = $instructions;
-if(!empty($instructions)) {
-	foreach($pdf_youtube_link as $links)
-	foreach($links->attributes as $attr){
-		if(strpos($attr->value,"youtube")!== false){
-			$array['youtubelink'] = $attr->value;
-		}
-		
-		else {
-			$array['pdflink'] = $attr->value;
-		}
-		$array['pdfname'] = $links->nodeValue;
-	}	
-}
-	// echo "<pre>";print_r($array);exit;
+foreach($pdf_youtube_link->attributes as $attr){
+	if(strpos($attr->value,"youtu")!== false){
+		$array['youtubelink'] = $attr->value;
+	}
+	else {
+		$array['pdflink'] = $attr->value;
+	}
+	$array['pdfname'] = $pdf_youtube_link->nodeValue;
+}	
 echo json_encode($array);
