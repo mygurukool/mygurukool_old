@@ -26,34 +26,31 @@ $dom = new DOMDocument();
 
 @$dom->loadHTML($result->data);
 //$dom->loadHTML($result->data);
-   
-$pdf_youtube_link = '';
+$pdf_youtube_link = [];
 $array = [];
 $array['instructions'] = '';
 $instructions = '';
-$submissionDate = '';
 foreach ($dom->getElementsByTagName('p') as $item) {
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName !== 'a') {
-		if (stripos($item->nodeValue, 'date') !== false){
-			$submissionDate = $item->nodeValue;
-		} else {
-			$instructions.= "<li>".$item->nodeValue."</li>";
-		}						
+						$instructions.= "<li>".$item->nodeValue."</li>";
 	}
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
-		$pdf_youtube_link = $item->firstChild;
-		foreach($pdf_youtube_link->attributes as $attr){
-			if(strpos($attr->value,"youtu")!== false){
-				$array['youtubelink'] = $attr->value;
-			}	
-			else {
-				$array['pdflink'] = $attr->value;
-				$array['pdfname'] = $pdf_youtube_link->nodeValue;
-			}
-		}
+		$pdf_youtube_link[] = $item->firstChild;
 	}
 }
 $array['instructions'] = $instructions;
-$array['submissionDate'] = $submissionDate;
-
+if(!empty($instructions)) {
+	foreach($pdf_youtube_link as $links)
+	foreach($links->attributes as $attr){
+		if(strpos($attr->value,"youtube")!== false){
+			$array['youtubelink'] = $attr->value;
+		}
+		
+		else {
+			$array['pdflink'] = $attr->value;
+		}
+		$array['pdfname'] = $links->nodeValue;
+	}	
+}
+	// echo "<pre>";print_r($array);exit;
 echo json_encode($array);

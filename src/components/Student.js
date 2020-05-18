@@ -233,7 +233,7 @@ export default class Student extends Component {
                     <AccordionItemHeading>
                       <AccordionItemButton>
                         <div className="row">
-                          <div className="float-left col-12">
+                          <div className="float-left col-12 exercisetitle">
                             {exe.title
                               ? (this.state.exerciseTitle = exe.title)
                               : "No Exercise Data"}

@@ -8,7 +8,12 @@ ul li { display:block; line-height: 35px }
 .App .logo {
   text-align: left;
 }
-
+.accordion__button:before {
+  float:left !important;
+}
+.exercisetitle {
+  margin-top:-8px;
+}
 .fileblock {
   padding-bottom: 0px !important;
 }
