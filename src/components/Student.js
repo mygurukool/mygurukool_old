@@ -64,6 +64,7 @@ export default class Student extends Component {
       isOpen: false,
       vidId: "",
       exerciseTitle: "",
+      groupDetails : ''
     };
 
     this.axiosCall = this.axiosCall.bind(this);
@@ -78,33 +79,43 @@ export default class Student extends Component {
       localStorage.setItem("token", this.props.match.params.token);
     }
     this.state.isLoading = true;
-
     this.axiosCall(
-      "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
+      process.env.REACT_APP_GRAPH_API_URL+"sites/mygurukool.sharepoint.com:/sites/"+process.env.REACT_APP_SCHOOL_SITE_NAME
     ).then((response) => {
-      this.setState({ studentData: response.data });
-      this.setState({
-        displayName: this.state.studentData.value[0].displayName,
-      });
-      localStorage.setItem(
-        "studentName",
-        this.state.studentData.value[0].displayName
-      );
+      this.setState({groupDetails : response.data})
+     
+
       this.axiosCall(
-        `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
+        "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
       ).then((response) => {
-        this.state.isLoading = false;
-        this.setState({ sections: response.data });
-        {
-          this.axiosCall(
-            `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
-          ).then((response) => {
-            this.setState({ exercise: response.data });
-            // console.log(this.state.exercise);
-            this.setState({ exercisedata: this.state.exercise });
-          });
-        }
+        this.setState({ studentData: response.data });
+        this.setState({
+          displayName: this.state.studentData.value[0].displayName,
+        });
+        localStorage.setItem(
+          "studentName",
+          this.state.studentData.value[0].displayName
+        );
+        this.axiosCall(
+          // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
+          process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupDetails.id}/onenote/sections/`
+        ).then((response) => {
+          this.state.isLoading = false;
+          this.setState({ sections: response.data });
+          {
+            this.axiosCall(
+              process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupDetails.id}/onenote/sections/${this.state.sections.value[0].id}/pages`
+              // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
+            ).then((response) => {
+              this.setState({ exercise: response.data });
+              // console.log(this.state.exercise);
+              this.setState({ exercisedata: this.state.exercise });
+            });
+          }
+        });
       });
+     // console.log(this.state.groupDetails.id);
+      console.log(process.env.REACT_APP_GRAPH_API_URL+"/sites/"+this.state.groupDetails.id+"/onenote/sectionGroups/");
     });
   }
 
@@ -119,7 +130,8 @@ export default class Student extends Component {
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
     this.axiosCall(
-      `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${event.target.id}/pages`
+      process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupDetails.id}/onenote/sections/${event.target.id}/pages`  
+      // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${event.target.id}/pages`
     ).then((response) => {
       this.state.isLoading = false;
       this.setState({ exercise: response.data });
