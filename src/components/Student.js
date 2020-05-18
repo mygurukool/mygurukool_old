@@ -230,62 +230,73 @@ export default class Student extends Component {
               {this.state.exercisedata &&
                 this.state.exercisedata.value.map((exe, i) => (
                   <AccordionItem>
-                    <AccordionItemHeading>
-                      <AccordionItemButton>
-                        <div className="row">
-                          <div className="float-left col-12 exercisetitle">
-                            {exe.title
-                              ? (this.state.exerciseTitle = exe.title)
-                              : "No Exercise Data"}
-                            <small class="text-muted float-right">
-                              {exe.content && exe.content.submissionDate
-                                ? exe.content.submissionDate
-                                : ""}
-                            </small>
-                          </div>
-                        </div>
-                      </AccordionItemButton>
-                    </AccordionItemHeading>
-                    <AccordionItemPanel>
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-8">
-                            <ul
-                              dangerouslySetInnerHTML={{
-                                __html: exe.content
-                                  ? exe.content.instructions
-                                  : "",
-                              }}
-                            ></ul>
-                          </div>
-                          <div className="col-4">
-                            <button
-                              type="button"
-                              className="btn btn-submit turnin"
-                            >
-                              <i class="fas fa-check"></i> Turn In
-                            </button>
-                          </div>
-                          <table class="table">
-                            {exe.content ? (
-                              <FileUpload exerciesDetails={exe.content} />
-                            ) : (
-                              ""
-                            )}
+                    {exe.title ? (
+                      <Fragment>
+                        <AccordionItemHeading>
+                          <AccordionItemButton>
+                            <div className="row">
+                              <div className="float-left col-12 exercisetitle">
+                                {exe.title
+                                  ? (this.state.exerciseTitle = exe.title)
+                                  : "No Exercise Data"}
+                                <small class="text-muted float-right">
+                                  {exe.content && exe.content.submissionDate
+                                    ? exe.content.submissionDate
+                                    : ""}
+                                </small>
+                              </div>
+                            </div>
+                          </AccordionItemButton>
+                        </AccordionItemHeading>
+                        <AccordionItemPanel>
+                          <div className="card-body">
+                            <div className="row">
+                              <div className="col-8">
+                                <ul
+                                  dangerouslySetInnerHTML={{
+                                    __html: exe.content
+                                      ? exe.content.instructions
+                                      : "",
+                                  }}
+                                ></ul>
+                              </div>
+                              <div className="col-4">
+                                <button
+                                  type="button"
+                                  className="btn btn-submit turnin"
+                                >
+                                  <i class="fas fa-check"></i> Turn In
+                                </button>
+                              </div>
+                            </div>
+                            <div className="row">
+                              <table class="table">
+                                {exe.content ? (
+                                  <FileUpload exerciesDetails={exe.content} />
+                                ) : (
+                                  ""
+                                )}
 
-                            <tr>
-                              <td colspan="3">{this.state.formUpload}</td>
-                            </tr>
-                          </table>
-                          {exe.content && exe.content.youtubelink
-                            ? this.buildVideoComponent(
-                                this.state.exerciseTitle + "_vid",
-                                exe.content.youtubelink
-                              )
-                            : ""}
-                        </div>
-                      </div>
-                    </AccordionItemPanel>
+                                <tr>
+                                  <td colspan="3">{this.state.formUpload}</td>
+                                </tr>
+                              </table>
+                              {exe.content && exe.content.youtubelink
+                                ? this.buildVideoComponent(
+                                    this.state.exerciseTitle + "_vid",
+                                    exe.content.youtubelink
+                                  )
+                                : ""}
+                            </div>
+                          </div>
+                        </AccordionItemPanel>
+                      </Fragment>
+                    ) : (
+                      <h5>
+                        Hurrayyy! You have finished all your assignments of this
+                        subject
+                      </h5>
+                    )}
                   </AccordionItem>
                 ))}
             </Accordion>
