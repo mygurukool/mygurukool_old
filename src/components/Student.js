@@ -249,15 +249,7 @@ export default class Student extends Component {
                     <AccordionItemPanel>
                       <div className="card-body">
                         <div className="row">
-                          <div className="col-12">
-                            <button
-                              type="button"
-                              className="btn btn-submit turnin"
-                            >
-                              <i class="fas fa-check"></i> Turn In
-                            </button>
-                          </div>
-                          <div className="card-header col-12">
+                          <div className="col-8">
                             <ul
                               dangerouslySetInnerHTML={{
                                 __html: exe.content
@@ -265,6 +257,14 @@ export default class Student extends Component {
                                   : "",
                               }}
                             ></ul>
+                          </div>
+                          <div className="col-4">
+                            <button
+                              type="button"
+                              className="btn btn-submit turnin"
+                            >
+                              <i class="fas fa-check"></i> Turn In
+                            </button>
                           </div>
                           <table class="table">
                             {exe.content ? (
