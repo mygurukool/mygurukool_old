@@ -15,7 +15,7 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
-import ModalVideo from "react-modal-video";
+import Video from "./Video";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -64,8 +64,6 @@ export default class Student extends Component {
       exerciseTitle: "",
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.buildVideoComponent = this.buildVideoComponent.bind(this);
     this.axiosCall = this.axiosCall.bind(this);
   }
   componentDidMount() {
@@ -112,33 +110,6 @@ export default class Student extends Component {
       params: {},
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-  }
-
-  buildVideoComponent(componentId, vidLink) {
-    //TODO: function should also extract video channel eg: youtube, youku, etc
-
-    //exctract vid Id
-    this.state.vidId = vidLink.split(/[\/]+/).pop();
-    //should the url has "=" before the vid id
-    this.state.vidId = vidLink.split(/[\=]+/).pop();
-
-    return (
-      <div id={componentId}>
-        <ModalVideo
-          channel="youtube"
-          isOpen={this.state.isOpen}
-          videoId={this.state.vidId}
-          onClose={() => this.setState({ isOpen: false })}
-        />
-        <button onClick={this.openModal}>
-          <i class="fas fa-video"></i> Im Video, Click me!!
-        </button>
-      </div>
-    );
-  }
-
-  openModal() {
-    this.setState({ isOpen: true });
   }
 
   handleClick = (event) => {
@@ -269,13 +240,12 @@ export default class Student extends Component {
                                 </button>
                               </div>
                             </div>
-                            <div class="col-12">
-                              {exe.content && exe.content.youtubelink
-                                ? this.buildVideoComponent(
-                                    this.state.exerciseTitle + "_vid",
-                                    exe.content.youtubelink
-                                  )
-                                : ""}
+                            <div className="teacher-excer col-12">
+                              {exe.content && exe.content.youtubelink ? (
+                                <Video vidUrl={exe.content.youtubelink} />
+                              ) : (
+                                ""
+                              )}
                             </div>
                             <div className="card card-body fileblock row">
                               <div class="col-12">
