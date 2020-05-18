@@ -70,7 +70,7 @@ export default class FileUpload extends Component {
   render() {
     return (
       <Fragment>
-        <div>
+        <table class="col-12">
           <tr className="teacher-excer col-12">
             <td className="pdflink">
               {this.state.exercisePdfName ? this.state.exercisePdfName : ""}
@@ -78,7 +78,7 @@ export default class FileUpload extends Component {
             <td>
               {this.state.exercisePdfLink ? (
                 <a href={this.state.exercisePdfLink} target="_blank">
-                  <i class="fas fa-eye fa-3x"></i>
+                  <i class="fas fa-eye fa-2x"></i>
                 </a>
               ) : (
                 ""
@@ -93,7 +93,7 @@ export default class FileUpload extends Component {
                 ""
               )}
             </td>
-            <td>
+            <td class="float-right">
               <a
                 href="#?"
                 onClick={this.handleSubmitClick}
@@ -103,8 +103,10 @@ export default class FileUpload extends Component {
               </a>
             </td>
           </tr>
+        </table>
+        <div>
           {this.state.hideFileUpload == false ? (
-            <div class="card card-body fileblock">
+            <div class="card card-body fileblock col-12">
               <div class="custom-file">
                 <input
                   type="file"

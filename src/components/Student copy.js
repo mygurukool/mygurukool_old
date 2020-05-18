@@ -269,24 +269,24 @@ export default class Student extends Component {
                                 </button>
                               </div>
                             </div>
-                            <div class="col-12">
+                            <div className="row">
+                              <table class="table">
+                                {exe.content ? (
+                                  <FileUpload exerciesDetails={exe.content} />
+                                ) : (
+                                  ""
+                                )}
+
+                                <tr>
+                                  <td colspan="3">{this.state.formUpload}</td>
+                                </tr>
+                              </table>
                               {exe.content && exe.content.youtubelink
                                 ? this.buildVideoComponent(
                                     this.state.exerciseTitle + "_vid",
                                     exe.content.youtubelink
                                   )
                                 : ""}
-                            </div>
-                            <div className="card card-body fileblock row">
-                              <div class="col-12">
-                                <div></div>
-                                {exe.content ? (
-                                  <FileUpload exerciesDetails={exe.content} />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              <div class="col-12">{this.state.formUpload}</div>
                             </div>
                           </div>
                         </AccordionItemPanel>
