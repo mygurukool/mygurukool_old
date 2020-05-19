@@ -13,6 +13,7 @@ export default class FileUpload extends Component {
       hideFileUpload: true,
       exercisePdfName: props.exerciesDetails.pdfname,
       exercisePdfLink: props.exerciesDetails.pdflink,
+      fileUploadedName:''
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -56,7 +57,8 @@ export default class FileUpload extends Component {
         }
       )
       .then((response) => {
-        console.log(response.statusText);
+        // console.log(response.data.@microsoft.graph.downloadUr);
+        this.setState({fileUploadedName:response.data})
         this.fileUploaded = true;
       })
       .catch((error) => {
@@ -103,6 +105,26 @@ export default class FileUpload extends Component {
               </a>
             </td>
           </tr>
+          <tr>
+          <td colspan="2">
+            {
+              this.state.fileUploadedName ?
+              this.state.fileUploadedName.name.toUpperCase() : ''
+            }
+          </td>
+          <td colspan="2">
+            {
+              this.state.fileUploadedName ? 
+              (
+                <a href={this.state.fileUploadedName.webUrl} target="_blank">
+                  <i class="fas fa-eye fa-2x"></i>
+                </a>
+              ) : (
+                ""
+              )
+            }
+          </td>
+          </tr>
         </table>
         <div>
           {this.state.hideFileUpload == false ? (
@@ -135,7 +157,7 @@ export default class FileUpload extends Component {
                   <i class="fas fa-cloud-upload-alt"></i> Upload
                 </button>
               </div>
-              {this.state.file ? this.state.file : ""}
+             
             </div>
           ) : (
             ""
