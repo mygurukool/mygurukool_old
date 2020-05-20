@@ -80,9 +80,7 @@ export default class Student extends Component {
     }
     this.state.isLoading = true;
     this.axiosCall(
-      process.env.REACT_APP_GRAPH_API_URL +
-        "sites/mygurukool.sharepoint.com:/sites/" +
-        process.env.REACT_APP_SCHOOL_SITE_NAME
+      process.env.REACT_APP_GRAPH_API_URL+"sites/"+process.env.REACT_APP_SHARE_POINT_URL+":/sites/"+process.env.REACT_APP_SCHOOL_SITE_NAME
     ).then((response) => {
       this.setState({ groupDetails: response.data });
 
@@ -286,7 +284,7 @@ export default class Student extends Component {
                               <div class="col-12">
                                 <div></div>
                                 {exe.content ? (
-                                  <FileUpload exerciesDetails={exe.content} />
+                                  <FileUpload exerciesDetails={exe.content} groupData={this.state.groupDetails.id} subjectName={this.state.currentView} title={exe.title} studentDetails={this.state.studentData}/>
                                 ) : (
                                   ""
                                 )}
