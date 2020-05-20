@@ -86,15 +86,16 @@ export default class Student extends Component {
      
 
       this.axiosCall(
-        "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
+        // "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
+        process.env.REACT_APP_GRAPH_API_URL+"/me"
       ).then((response) => {
         this.setState({ studentData: response.data });
         this.setState({
-          displayName: this.state.studentData.value[0].displayName,
+          displayName: this.state.studentData.displayName,
         });
         localStorage.setItem(
           "studentName",
-          this.state.studentData.value[0].displayName
+          this.state.studentData.displayName
         );
         this.axiosCall(
           // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
