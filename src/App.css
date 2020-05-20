@@ -211,6 +211,17 @@ h2 small {
 .teacher-excer-attention {
   background-color: #f8f55a;
 }
+.testing-color-yellow {
+  background-color: rgb(252, 243, 176);
+}
+.testing-color-green {
+  background-color: #c7f3b3;
+
+  /* rgb(193, 238, 172)  rgb(195, 250, 169)*/
+}
+.testing-color-purple {
+  background-color: rgb(253, 179, 247);
+}
 .student-excer {
   background-color: #cbe8ea;
 }

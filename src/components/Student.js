@@ -64,7 +64,7 @@ export default class Student extends Component {
       isOpen: false,
       vidId: "",
       exerciseTitle: "",
-      groupDetails : ''
+      groupDetails: "",
     };
 
     this.axiosCall = this.axiosCall.bind(this);
@@ -80,32 +80,32 @@ export default class Student extends Component {
     }
     this.state.isLoading = true;
     this.axiosCall(
-      process.env.REACT_APP_GRAPH_API_URL+"sites/mygurukool.sharepoint.com:/sites/"+process.env.REACT_APP_SCHOOL_SITE_NAME
+      process.env.REACT_APP_GRAPH_API_URL +
+        "sites/mygurukool.sharepoint.com:/sites/" +
+        process.env.REACT_APP_SCHOOL_SITE_NAME
     ).then((response) => {
-      this.setState({groupDetails : response.data})
-     
+      this.setState({ groupDetails: response.data });
 
       this.axiosCall(
         // "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
-        process.env.REACT_APP_GRAPH_API_URL+"/me"
+        process.env.REACT_APP_GRAPH_API_URL + "/me"
       ).then((response) => {
         this.setState({ studentData: response.data });
         this.setState({
           displayName: this.state.studentData.displayName,
         });
-        localStorage.setItem(
-          "studentName",
-          this.state.studentData.displayName
-        );
+        localStorage.setItem("studentName", this.state.studentData.displayName);
         this.axiosCall(
           // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
-          process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupDetails.id}/onenote/sections/`
+          process.env.REACT_APP_GRAPH_API_URL +
+            `sites/${this.state.groupDetails.id}/onenote/sections/`
         ).then((response) => {
           this.state.isLoading = false;
           this.setState({ sections: response.data });
           {
             this.axiosCall(
-              process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupDetails.id}/onenote/sections/${this.state.sections.value[0].id}/pages`
+              process.env.REACT_APP_GRAPH_API_URL +
+                `sites/${this.state.groupDetails.id}/onenote/sections/${this.state.sections.value[0].id}/pages`
               // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
             ).then((response) => {
               this.setState({ exercise: response.data });
@@ -115,8 +115,13 @@ export default class Student extends Component {
           }
         });
       });
-     // console.log(this.state.groupDetails.id);
-      console.log(process.env.REACT_APP_GRAPH_API_URL+"/sites/"+this.state.groupDetails.id+"/onenote/sectionGroups/");
+      // console.log(this.state.groupDetails.id);
+      console.log(
+        process.env.REACT_APP_GRAPH_API_URL +
+          "/sites/" +
+          this.state.groupDetails.id +
+          "/onenote/sectionGroups/"
+      );
     });
   }
 
@@ -131,7 +136,8 @@ export default class Student extends Component {
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
     this.axiosCall(
-      process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupDetails.id}/onenote/sections/${event.target.id}/pages`  
+      process.env.REACT_APP_GRAPH_API_URL +
+        `sites/${this.state.groupDetails.id}/onenote/sections/${event.target.id}/pages`
       // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${event.target.id}/pages`
     ).then((response) => {
       this.state.isLoading = false;
@@ -226,7 +232,7 @@ export default class Student extends Component {
               loading={this.state.isLoading}
             />
 
-            <Accordion allowZeroExpanded={true}>
+            <Accordion allowZeroExpanded={true} className="testing-color-green">
               {this.state.exercisedata &&
                 this.state.exercisedata.value.map((exe, i) => (
                   <AccordionItem>
@@ -250,7 +256,7 @@ export default class Student extends Component {
                         </AccordionItemHeading>
                         <AccordionItemPanel>
                           <div className="card-body">
-                            <div className="row">
+                            <div className="row testing-color-yellow">
                               <div className="col-8">
                                 <ul
                                   dangerouslySetInnerHTML={{

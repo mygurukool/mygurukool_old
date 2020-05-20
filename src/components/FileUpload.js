@@ -13,7 +13,7 @@ export default class FileUpload extends Component {
       hideFileUpload: true,
       exercisePdfName: props.exerciesDetails.pdfname,
       exercisePdfLink: props.exerciesDetails.pdflink,
-      fileUploadedName:''
+      fileUploadedName: "",
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -58,7 +58,7 @@ export default class FileUpload extends Component {
       )
       .then((response) => {
         // console.log(response.data.@microsoft.graph.downloadUr);
-        this.setState({fileUploadedName:response.data})
+        this.setState({ fileUploadedName: response.data });
         this.fileUploaded = true;
       })
       .catch((error) => {
@@ -73,7 +73,7 @@ export default class FileUpload extends Component {
     return (
       <Fragment>
         <table class="col-12">
-          <tr className="teacher-excer-attention col-12">
+          <tr className="testing-color-purple col-12">
             <td className="pdflink">
               {this.state.exercisePdfName ? this.state.exercisePdfName : ""}
             </td>
@@ -106,24 +106,20 @@ export default class FileUpload extends Component {
             </td>
           </tr>
           <tr>
-          <td colspan="2">
-            {
-              this.state.fileUploadedName ?
-              this.state.fileUploadedName.name.toUpperCase() : ''
-            }
-          </td>
-          <td colspan="2">
-            {
-              this.state.fileUploadedName ? 
-              (
+            <td colspan="2">
+              {this.state.fileUploadedName
+                ? this.state.fileUploadedName.name.toUpperCase()
+                : ""}
+            </td>
+            <td colspan="2">
+              {this.state.fileUploadedName ? (
                 <a href={this.state.fileUploadedName.webUrl} target="_blank">
                   <i class="fas fa-eye fa-2x"></i>
                 </a>
               ) : (
                 ""
-              )
-            }
-          </td>
+              )}
+            </td>
           </tr>
         </table>
         <div>
@@ -157,7 +153,6 @@ export default class FileUpload extends Component {
                   <i class="fas fa-cloud-upload-alt"></i> Upload
                 </button>
               </div>
-             
             </div>
           ) : (
             ""
