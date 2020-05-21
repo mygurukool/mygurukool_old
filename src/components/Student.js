@@ -193,7 +193,7 @@ export default class Student extends Component {
           <div className="row section-nav">
             <div className="col-12">
               <div className="alert alert-primary" role="alert">
-                <span className="badge badge-light">
+                <span>
                   {/* Student name */}
                   {this.state.displayName}
                 </span>
@@ -273,9 +273,9 @@ export default class Student extends Component {
                         </AccordionItemHeading>
                         <AccordionItemPanel>
                           <div className="card-body">
-                            <b>Exercise Instructions</b>
                             <div className="row testing-color-yellow">
                               <div className="col-8">
+                                <b>Exercise Instructions</b>
                                 <ul
                                   dangerouslySetInnerHTML={{
                                     __html: exe.content
@@ -292,14 +292,16 @@ export default class Student extends Component {
                                   <i class="fas fa-check"></i> Turn In
                                 </button>
                               </div>
-                            </div>
-                            <div className="teacher-excer col-12">
-                              <b>Exercise Video Explanation</b>
-                              {exe.content && exe.content.youtubelink ? (
-                                <Video vidUrl={exe.content.youtubelink} />
-                              ) : (
-                                ""
-                              )}
+                              <div className="col-12">
+                                <b>Exercise Video Explanation</b>
+                                <ul>
+                                  {exe.content && exe.content.youtubelink ? (
+                                    <Video vidUrl={exe.content.youtubelink} />
+                                  ) : (
+                                    ""
+                                  )}
+                                </ul>
+                              </div>
                             </div>
                             <div className="card card-body fileblock row">
                               <div class="col-12">
