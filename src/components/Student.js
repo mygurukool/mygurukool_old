@@ -60,11 +60,12 @@ export default class Student extends Component {
       exercisedata: "",
       isLoading: false,
       formUpload: "",
-      currentView: "Dutch",
+      currentView: "",
       isOpen: false,
       vidId: "",
       exerciseTitle: "",
       groupDetails: "",
+      subjectIcon: "",
     };
 
     this.axiosCall = this.axiosCall.bind(this);
@@ -108,6 +109,9 @@ export default class Student extends Component {
                 `sites/${this.state.groupDetails.id}/onenote/sections/${this.state.sections.value[0].id}/pages`
               // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
             ).then((response) => {
+              this.setState({
+                currentView: this.state.sections.value[0].displayName,
+              });
               this.setState({ exercise: response.data });
               // console.log(this.state.exercise);
               this.setState({ exercisedata: this.state.exercise });
@@ -133,6 +137,7 @@ export default class Student extends Component {
   }
 
   handleClick = (event) => {
+    alert(event.target.id);
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
     this.axiosCall(
@@ -162,13 +167,23 @@ export default class Student extends Component {
     return false;
   };
 
-  displaySubjectIconByName(subjectName) {
+  displaySubjectIconByName(subjectName, targetId) {
+    this.state.subjectIcon = "";
     if (subjectName === "Maths") {
-      return <img src={maths} className="subjectIcon" />;
+      this.state.subjectIcon = maths;
     } else if (subjectName === "German") {
-      return <img src={maths2} className="subjectIcon" />;
+      this.state.subjectIcon = maths2;
+    } else {
+      return "";
     }
-    return "";
+    return (
+      <img
+        src={this.state.subjectIcon}
+        id={targetId}
+        className="subjectIcon"
+        onClick={this.handleClick}
+      />
+    );
   }
 
   render() {
@@ -216,7 +231,10 @@ export default class Student extends Component {
                           {/* Exercise Name */}
                           {key.displayName}
                           <br />
-                          {this.displaySubjectIconByName(key.displayName)}
+                          {this.displaySubjectIconByName(
+                            key.displayName,
+                            key.id
+                          )}
                         </a>
                       </li>
                     ))}
@@ -256,6 +274,7 @@ export default class Student extends Component {
                         </AccordionItemHeading>
                         <AccordionItemPanel>
                           <div className="card-body">
+                            <b>Exercise Instructions</b>
                             <div className="row testing-color-yellow">
                               <div className="col-8">
                                 <ul
@@ -276,6 +295,7 @@ export default class Student extends Component {
                               </div>
                             </div>
                             <div className="teacher-excer col-12">
+                              <b>Exercise Video Explanation</b>
                               {exe.content && exe.content.youtubelink ? (
                                 <Video vidUrl={exe.content.youtubelink} />
                               ) : (
