@@ -1,5 +1,7 @@
 import React from "react";
 import ModalVideo from "react-modal-video";
+import "../scss/modal-video.scss";
+
 export default class Video extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +36,11 @@ export default class Video extends React.Component {
           videoId={this.state.vidId}
           onClose={() => this.setState({ isOpen: false })}
         />
-        <button onClick={this.openModal}>
+        <button
+          type="button"
+          classname="btn btn-submit margin-5px"
+          onClick={this.openModal}
+        >
           <i class="fas fa-video"></i> Im Video, Click me!!
         </button>
       </div>
