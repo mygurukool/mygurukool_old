@@ -137,7 +137,6 @@ export default class Student extends Component {
   }
 
   handleClick = (event) => {
-    alert(event.target.id);
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
     this.axiosCall(
