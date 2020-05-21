@@ -13,44 +13,62 @@ export default class FileUpload extends Component {
       hideFileUpload: true,
       exercisePdfName: props.exerciesDetails.pdfname,
       exercisePdfLink: props.exerciesDetails.pdflink,
-      fileUploadedName:'',
+      fileUploadedName: "",
       groupId: props.groupData,
-      subjectName:props.subjectName,
-      title:props.title,
-      studentDetails:props.studentDetails,
-      fileName:'',
-      exerciseFiles:''
+      subjectName: props.subjectName,
+      title: props.title,
+      studentDetails: props.studentDetails,
+      fileName: "",
+      exerciseFiles: "",
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
-    this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    this.handleUploadClick = this.handleUploadClick.bind(this);
   }
   componentDidMount() {
-    axios.get(
-        process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drives`,{
+    axios
+      .get(
+        process.env.REACT_APP_GRAPH_API_URL +
+          `sites/${this.state.groupId}/drives`,
+        {
           params: {},
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }).then((driveRes) => {
-          axios.get(
-            process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drive/root/search(q='{${this.state.title}}')`,{
-            params: {},
-            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-          }).then((res) => {
-            // console.log(process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}/children`);
-            if(res.data.value[0]){
-              axios.get(
-                process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}/children`,{
-              // 'https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com,7c9fc398-a705-4e32-8b92-1c55f6536ca5,960408e8-1290-401d-bb0e-e80861e1e003/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z6LKU4S3RYOL5C22SQRAF2SC7MV/children',
-                params: {},
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-              }).then((fileRes) => {
-                this.setState({exerciseFiles:fileRes.data})
-                console.log(fileRes.data);
-              })
+        }
+      )
+      .then((driveRes) => {
+        axios
+          .get(
+            process.env.REACT_APP_GRAPH_API_URL +
+              `sites/${this.state.groupId}/drive/root/search(q='{${this.state.title}}')`,
+            {
+              params: {},
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
             }
-            
-          })
-        });
+          )
+          .then((res) => {
+            // console.log(process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}/children`);
+            if (res.data.value[0]) {
+              axios
+                .get(
+                  process.env.REACT_APP_GRAPH_API_URL +
+                    `sites/root/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}/children`,
+                  {
+                    // 'https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com,7c9fc398-a705-4e32-8b92-1c55f6536ca5,960408e8-1290-401d-bb0e-e80861e1e003/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z6LKU4S3RYOL5C22SQRAF2SC7MV/children',
+                    params: {},
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                  }
+                )
+                .then((fileRes) => {
+                  this.setState({ exerciseFiles: fileRes.data });
+                  console.log(fileRes.data);
+                });
+            }
+          });
+      });
   }
   handleFileChange = (event) => {
     this.file = event.target.files[0];
@@ -68,7 +86,7 @@ export default class FileUpload extends Component {
     });
   };
 
-  handleSubmitClick = (event) => {
+  handleUploadClick = (event) => {
     this.setState({
       hideFileUpload: false,
     });
@@ -80,47 +98,68 @@ export default class FileUpload extends Component {
     // alert(this.file);
     // return false;
     formData.append(this.file.name, this.file);
-    axios.get(
-      process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drives`,{
-      params: {},
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    }).then((driveRes) => {
-      // console.log(driveRes.data);
-       axios.get(
-        process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drive/root/search(q='{${this.state.title}}')`,{
-        params: {},
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      }).then((res) => {
-        // console.log(res.data)
-        // console.log(process.env.REACT_APP_GRAPH_API_URL+"sites/"+process.env.REACT_APP_SHARE_POINT_URL+`/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}:/${this.file.name}:/content`);
-        // return false;
-        
+    axios
+      .get(
+        process.env.REACT_APP_GRAPH_API_URL +
+          `sites/${this.state.groupId}/drives`,
+        {
+          params: {},
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+      .then((driveRes) => {
+        // console.log(driveRes.data);
         axios
-        .put(
-          process.env.REACT_APP_GRAPH_API_URL+"sites/"+process.env.REACT_APP_SHARE_POINT_URL+`/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}:/${this.state.studentDetails.displayName.replace(" ","_")+"_"+this.file.name}:/content`,
-          // `https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z4Y4ILBEY3CBVF3WAF26DLAFX7M:/${this.file.name}:/content`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/octet-stream",
-            },
-          }
-        )
-        .then((response) => {
-          // console.log(response.data.@microsoft.graph.downloadUr);
-          this.setState({fileUploadedName:response.data})
-          this.setState({fileName:this.file.name});
-          this.fileUploaded = true;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-        this.setState({
-          hideFileUpload: true,
-        });
+          .get(
+            process.env.REACT_APP_GRAPH_API_URL +
+              `sites/${this.state.groupId}/drive/root/search(q='{${this.state.title}}')`,
+            {
+              params: {},
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            // console.log(res.data)
+            // console.log(process.env.REACT_APP_GRAPH_API_URL+"sites/"+process.env.REACT_APP_SHARE_POINT_URL+`/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}:/${this.file.name}:/content`);
+            // return false;
+
+            axios
+              .put(
+                process.env.REACT_APP_GRAPH_API_URL +
+                  "sites/" +
+                  process.env.REACT_APP_SHARE_POINT_URL +
+                  `/drives/${driveRes.data.value[0].id}/items/${
+                    res.data.value[0].id
+                  }:/${
+                    this.state.studentDetails.displayName.replace(" ", "_") +
+                    "_" +
+                    this.file.name
+                  }:/content`,
+                // `https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z4Y4ILBEY3CBVF3WAF26DLAFX7M:/${this.file.name}:/content`,
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "application/octet-stream",
+                  },
+                }
+              )
+              .then((response) => {
+                // console.log(response.data.@microsoft.graph.downloadUr);
+                this.setState({ fileUploadedName: response.data });
+                this.setState({ fileName: this.file.name });
+                this.fileUploaded = true;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            this.setState({
+              hideFileUpload: true,
+            });
+          });
       });
-    })
   };
 
   render() {
@@ -152,24 +191,21 @@ export default class FileUpload extends Component {
             <td class="float-right">
               <a
                 href="#?"
-                onClick={this.handleSubmitClick}
+                onClick={this.handleUploadClick}
                 className="btn btn-primary"
               >
-                <i class="fas fa-upload"></i> Submit
+                <i class="fas fa-upload"></i> Upload Exercise
               </a>
             </td>
           </tr>
           <tr>
-          <td colspan="2">
-            {
-              this.state.fileUploadedName ?
-              this.state.fileName.toUpperCase() : ''
-            }
-          </td>
-          <td colspan="2">
-            {
-              this.state.fileUploadedName ? 
-              (
+            <td colspan="2">
+              {this.state.fileUploadedName
+                ? this.state.fileName.toUpperCase()
+                : ""}
+            </td>
+            <td colspan="2">
+              {this.state.fileUploadedName ? (
                 <a href={this.state.fileUploadedName.webUrl} target="_blank">
                   <i class="fas fa-eye fa-2x"></i>
                 </a>
@@ -207,7 +243,7 @@ export default class FileUpload extends Component {
                   className="btn btn-success"
                   onClick={this.handleClick}
                 >
-                  <i class="fas fa-cloud-upload-alt"></i> Upload
+                  <i class="fas fa-cloud-upload-alt"></i> Submit
                 </button>
               </div>
             </div>
@@ -215,21 +251,27 @@ export default class FileUpload extends Component {
             ""
           )}
           <table className="table table-stripped">
-              {
-                this.state.exerciseFiles && 
-                this.state.exerciseFiles.value.map((exe, i) => (
-                  <tr>
+            {this.state.exerciseFiles &&
+              this.state.exerciseFiles.value.map((exe, i) => (
+                <tr>
                   <td colspan="2">
-                    {exe.name.replace(this.state.studentDetails.displayName.replace(" ","_")+"_","").toUpperCase()}
+                    {exe.name
+                      .replace(
+                        this.state.studentDetails.displayName.replace(
+                          " ",
+                          "_"
+                        ) + "_",
+                        ""
+                      )
+                      .toUpperCase()}
                   </td>
                   <td colspan="2">
                     <a href={exe.webUrl} target="_blank">
                       <i class="fas fa-eye fa-2x"></i>
                     </a>
                   </td>
-                  </tr>
-                )
-              )}
+                </tr>
+              ))}
           </table>
         </div>
       </Fragment>
