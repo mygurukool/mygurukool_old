@@ -60,7 +60,7 @@ export default class Student extends Component {
       exercisedata: "",
       isLoading: false,
       formUpload: "",
-      currentView: "",
+      currentView: "Dutch",
       isOpen: false,
       vidId: "",
       exerciseTitle: "",
