@@ -60,7 +60,7 @@ export default class Student extends Component {
       exercisedata: "",
       isLoading: false,
       formUpload: "",
-      currentView: "Dutch",
+      currentView: "",
       isOpen: false,
       vidId: "",
       exerciseTitle: "",
@@ -108,6 +108,7 @@ export default class Student extends Component {
                 `sites/${this.state.groupDetails.id}/onenote/sections/${this.state.sections.value[0].id}/pages`
               // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
             ).then((response) => {
+              this.setState({currentView:this.state.sections.value[0].displayName})
               this.setState({ exercise: response.data });
               // console.log(this.state.exercise);
               this.setState({ exercisedata: this.state.exercise });
