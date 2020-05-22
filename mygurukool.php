@@ -27,7 +27,7 @@ $dom = new DOMDocument();
 @$dom->loadHTML($result->data);
 //$dom->loadHTML($result->data);
    
-$pdf_youtube_link = '';
+$file_youtube_link = '';
 $array = [];
 $array['instructions'] = '';
 $instructions = '';
@@ -41,14 +41,14 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 		}						
 	}
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
-		$pdf_youtube_link = $item->firstChild;
-		foreach($pdf_youtube_link->attributes as $attr){
+		$file_youtube_link = $item->firstChild;
+		foreach($file_youtube_link->attributes as $attr){
 			if(strpos($attr->value,"youtu")!== false){
 				$array['youtubelink'] = $attr->value;
 			}	
 			else {
-				$array['pdflink'] = $attr->value;
-				$array['pdfname'] = $pdf_youtube_link->nodeValue;
+				$array['filelink'] = $attr->value;
+				$array['filename'] = $file_youtube_link->nodeValue;
 			}
 		}
 	}
@@ -56,8 +56,12 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 if(!empty($dom->getElementsByTagName('object'))){
 	foreach ($dom->getElementsByTagName('object') as $item) {
 		foreach($item->attributes as $attr){
-			if($attr->name == 'data') {
-				$array['pdfObject'] = str_replace("siteCollections","sites",$attr->value);
+			if($attr->name == 'data-attachment') {
+				$array['filename'] = $attr->value;
+			} else if($attr->name == 'type') {
+				$array['filetype'] = $attr->value;
+			} else if($attr->name == 'data') {
+				$array['fileObject'] = str_replace("siteCollections","sites",$attr->value);
 			}	
 		}
 	}

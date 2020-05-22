@@ -11,8 +11,10 @@ export default class FileUpload extends Component {
       file: "",
       fileUploaded: "",
       hideFileUpload: true,
-      exercisePdfName: props.exerciesDetails.pdfname,
-      exercisePdfLink: props.exerciesDetails.pdflink,
+      exerciseFileName: props.exerciesDetails.filename,
+      exerciseFileLink: props.exerciesDetails.filelink,
+      exerciseFileObject: props.exerciesDetails.fileObject,
+      exerciseFileType: props.exerciesDetails.filetype,
       fileUploadedName: "",
       groupId: props.groupData,
       subjectName: props.subjectName,
@@ -20,11 +22,17 @@ export default class FileUpload extends Component {
       studentDetails: props.studentDetails,
       fileName: "",
       exerciseFiles: "",
+      fetchedFileURL: "",
+      toDownloadFile: true,
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
     this.handleUploadClick = this.handleUploadClick.bind(this);
+    this.fetchFile = this.fetchFile.bind(this);
+    this.displayFile = this.displayFile.bind(this);
+    this.downloadPDF = this.downloadPDF.bind(this);
   }
+
   componentDidMount() {
     axios
       .get(
@@ -70,6 +78,7 @@ export default class FileUpload extends Component {
           });
       });
   }
+
   handleFileChange = (event) => {
     this.file = event.target.files[0];
     this.setState({
@@ -91,6 +100,81 @@ export default class FileUpload extends Component {
       hideFileUpload: false,
     });
   };
+
+  displayFile() {
+    // const toDownloadFile = true;
+    if (this.state.exerciseFileLink) {
+      this.state.fetchedFileURL = this.state.exerciseFileLink;
+    } else if (this.state.exerciseFileObject) {
+      this.fetchFile(this.state.exerciseFileObject);
+    } else {
+      this.state.toDownloadFile = false;
+    }
+    return (
+      <Fragment>
+        <td>
+          {this.state.toDownloadFile ? (
+            <a href={this.state.fetchedFileURL} target="_blank">
+              <i class="fas fa-eye fa-2x"></i>
+            </a>
+          ) : (
+            ""
+          )}
+        </td>
+        <td>
+          {this.state.toDownloadFile ? (
+            <a
+              href={this.state.fetchedFileURL}
+              target="_blank"
+              //onClick={this.downloadPDF()}
+            >
+              <i class="fas fa-download fa-2x"></i>
+            </a>
+          ) : (
+            ""
+          )}
+          {/* {this.state.exerciseFileObject ? (
+            <a
+              href="#?"
+              className="btn btn-primary"
+              id={this.state.exerciseFileObject}
+              onClick={this.fetchFile}
+            >
+              <i class="fas fa-download fa-2x"></i>
+            </a>
+          ) : (
+            ""
+          )} */}
+        </td>
+      </Fragment>
+    );
+  }
+
+  downloadPDF() {
+    alert("download file");
+    const link = document.createElement("a");
+    link.href = this.state.fetchedFileURL;
+    link.setAttribute("download", this.state.exerciseFileName); //or any other extension
+    document.body.appendChild(link);
+    link.click();
+  }
+
+  fetchFile(targetId) {
+    axios
+      .get(targetId, {
+        params: {},
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Accept: this.state.exerciseFileType,
+        },
+        responseType: "blob", // important
+      })
+      .then((response) => {
+        this.state.fetchedFileURL = window.URL.createObjectURL(
+          new Blob([response.data])
+        );
+      });
+  }
 
   handleClick = (event) => {
     const formData = new FormData();
@@ -167,27 +251,10 @@ export default class FileUpload extends Component {
       <Fragment>
         <table class="col-12">
           <tr className="testing-color-purple col-12">
-            <td className="pdflink">
-              {this.state.exercisePdfName ? this.state.exercisePdfName : ""}
+            <td className="filelink">
+              {this.state.exerciseFileName ? this.state.exerciseFileName : ""}
             </td>
-            <td>
-              {this.state.exercisePdfLink ? (
-                <a href={this.state.exercisePdfLink} target="_blank">
-                  <i class="fas fa-eye fa-2x"></i>
-                </a>
-              ) : (
-                ""
-              )}
-            </td>
-            <td>
-              {this.state.exercisePdfLink ? (
-                <a href={this.state.exercisePdfLink} target="_blank">
-                  <i class="fas fa-download fa-2x"></i>
-                </a>
-              ) : (
-                ""
-              )}
-            </td>
+            <td>{this.displayFile()}</td>
             <td class="float-right">
               <a
                 href="#?"

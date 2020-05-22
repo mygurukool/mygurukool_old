@@ -70,7 +70,6 @@ export default class Student extends Component {
 
     this.axiosCall = this.axiosCall.bind(this);
     this.displaySubjectIconByName = this.displaySubjectIconByName.bind(this);
-    this.downloadPdf = this.downloadPdf.bind(this);
   }
   componentDidMount() {
     if (
@@ -186,26 +185,6 @@ export default class Student extends Component {
     );
   }
 
-  downloadPdf = (event) => {
-    event.preventDefault();
-    // alert(event.target.id)
-    axios.get(event.target.id, {
-      params: {},
-      headers: { 
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        'Accept': 'application/pdf'
-       },
-       responseType: 'blob', // important
-      }).then((response) => {
-         const url = window.URL.createObjectURL(new Blob([response.data]));
-         const link = document.createElement('a');
-         link.href = url;
-         link.setAttribute('download', 'download.pdf'); //or any other extension
-         document.body.appendChild(link);
-         link.click();
-      });
-  }
-
   render() {
     return (
       <Fragment>
@@ -303,19 +282,7 @@ export default class Student extends Component {
                                       ? exe.content.instructions
                                       : "",
                                   }}
-                                >
-
-                                </ul>
-                                <div>
-                                  {
-                                    exe.content && exe.content.pdfObject ?
-                                    (
-                                      <a href='#?' className='btn btn-primary' id={exe.content.pdfObject} onClick={this.downloadPdf}> Download PDF </a>
-                                    )
-                                    :("")
-                                  }
-                                </div>
-                                
+                                ></ul>
                               </div>
                               <div className="col-4">
                                 <button
