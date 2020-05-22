@@ -53,6 +53,15 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 		}
 	}
 }
+if(!empty($dom->getElementsByTagName('object'))){
+	foreach ($dom->getElementsByTagName('object') as $item) {
+		foreach($item->attributes as $attr){
+			if($attr->name == 'data') {
+				$array['pdfObject'] = str_replace("siteCollections","sites",$attr->value);
+			}	
+		}
+	}
+}	
 $array['instructions'] = $instructions;
 $array['submissionDate'] = $submissionDate;
 
