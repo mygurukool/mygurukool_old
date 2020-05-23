@@ -33,12 +33,16 @@ $array['instructions'] = '';
 $instructions = '';
 $submissionDate = '';
 foreach ($dom->getElementsByTagName('p') as $item) {
+	
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName !== 'a') {
 		if (stripos($item->nodeValue, 'date') !== false){
 			$submissionDate = $item->nodeValue;
 		} else {
 			$instructions.= "<li>".$item->nodeValue."</li>";
 		}						
+	}	
+	if(isset($item->firstChild->wholeText)){
+		$instructions.= "<li>".$item->firstChild->wholeText."</li>";
 	}
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
 		$file_youtube_link = $item->firstChild;
