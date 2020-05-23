@@ -38,7 +38,7 @@ export default class Video extends React.Component {
         />
         <button
           type="button"
-          classname="btn btn-submit margin-5px"
+          className="btn btn-danger margin-5px"
           onClick={this.openModal}
         >
           <i class="fas fa-video"></i> Im Video, Click me!!

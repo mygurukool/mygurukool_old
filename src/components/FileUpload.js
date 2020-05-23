@@ -268,7 +268,7 @@ export default class FileUpload extends Component {
           <tr>
             <td colspan="2">
               {this.state.fileUploadedName
-                ? this.state.fileName.toUpperCase()
+                ? this.state.fileName
                 : ""}
             </td>
             <td colspan="2">
@@ -304,10 +304,9 @@ export default class FileUpload extends Component {
                   className="btn btn-danger"
                 >
                   <i class="far fa-times-circle"></i> Cancel
-                </button>
-                <button
+                </button> <button
                   type="button"
-                  className="btn btn-success"
+                  className="btn btn-success upload-btn"
                   onClick={this.handleClick}
                 >
                   <i class="fas fa-cloud-upload-alt"></i> Submit
@@ -329,8 +328,7 @@ export default class FileUpload extends Component {
                           "_"
                         ) + "_",
                         ""
-                      )
-                      .toUpperCase()}
+                      )}
                   </td>
                   <td colspan="2">
                     <a href={exe.webUrl} target="_blank">
