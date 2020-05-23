@@ -217,7 +217,7 @@ export default class FileUpload extends Component {
                   `/drives/${driveRes.data.value[0].id}/items/${
                     res.data.value[0].id
                   }:/${
-                    this.state.studentDetails.displayName.replace(" ", "_") +
+                    this.state.studentDetails.displayName.replace("/", "_") +
                     "_" +
                     this.file.name
                   }:/content`,
@@ -325,7 +325,7 @@ export default class FileUpload extends Component {
                     {exe.name
                       .replace(
                         this.state.studentDetails.displayName.replace(
-                          " ",
+                          "/",
                           "_"
                         ) + "_",
                         ""

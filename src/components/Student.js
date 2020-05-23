@@ -93,13 +93,13 @@ export default class Student extends Component {
       ).then((response) => {
         this.setState({ studentData: response.data });
         this.setState({
-          displayName: this.state.studentData.displayName,
+          displayName: this.state.studentData.displayName.replace("/"," "),
         });
-        localStorage.setItem("studentName", this.state.studentData.displayName);
+        localStorage.setItem("studentName", this.state.studentData.displayName.replace("/","_"));
         this.axiosCall(
           // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
           process.env.REACT_APP_GRAPH_API_URL +
-            `sites/${this.state.groupDetails.id}/onenote/sections?$filter=contains(parentSectionGroup/displayName,'${this.state.studentData.displayName}')`
+            `sites/${this.state.groupDetails.id}/onenote/sections?$filter=contains(parentSectionGroup/displayName,'${this.state.studentData.displayName.replace("/","_")}')`
         ).then((response) => {
           this.state.isLoading = false;
           this.setState({ sections: response.data });
