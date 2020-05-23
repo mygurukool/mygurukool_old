@@ -4,7 +4,7 @@ $ch = curl_init();
 
 $code = $_GET['code'];
 
-$url = 'https://login.microsoftonline.com/mygurukool.onmicrosoft.com/oauth2/v2.0/token';
+$url = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
 
 $data = array(
   'grant_type'    => 'authorization_code',
