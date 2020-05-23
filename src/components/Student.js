@@ -99,7 +99,7 @@ export default class Student extends Component {
         this.axiosCall(
           // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
           process.env.REACT_APP_GRAPH_API_URL +
-            `sites/${this.state.groupDetails.id}/onenote/sections/`
+            `sites/${this.state.groupDetails.id}/onenote/sections?$filter=contains(parentSectionGroup/displayName,'Mahatma Gandhi')`
         ).then((response) => {
           this.state.isLoading = false;
           this.setState({ sections: response.data });
