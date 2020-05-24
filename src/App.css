@@ -9,37 +9,36 @@ ul li {
 }
 .filelink a {
   color: #007bff;
-  font-size :12px;
-
+  font-size: 12px;
 }
 .filename {
   text-align: center;
 }
 .file_icons {
   width: 47%;
-  font-size :12px;  
+  font-size: 12px;
 }
 .icons {
   width: 21%;
-    text-align: right;
+  text-align: right;
 }
 .accordion {
-  border :0px !important;
+  border: 0px !important;
 }
 .accordion__item {
   margin: 5px;
-    border-radius: 5px;
-    border: 1px solid #dfdfdf;
+  border-radius: 5px;
+  border: 1px solid #dfdfdf;
 }
 .upload-btn {
-  margin-left :3px;
+  margin-left: 3px;
 }
 .custom-file-label {
   background: darkslateblue;
-    color: #fff;
+  color: #fff;
 }
 .testing-color-blue {
-  background: #49c5b6
+  background: #49c5b6;
 }
 table {
   border-collapse: collapse;
@@ -48,18 +47,22 @@ table {
   border: 1px solid #ddd;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 5px !important;
 }
 
 tr:nth-child(even) {
   background-color: #c3e6cb;
-  color:#000;
+  color: #000;
 }
 .btn-video {
-  background: yellow !important;
-  border: 1px solid yellow;color:#000;
+  /* background: yellow !important;
+  border: 1px solid yellow;color:#000; rgb(252, 243, 176);*/
+  background: rgb(241, 219, 20) !important;
+  border: 1px solid rgb(241, 219, 20);
+  color: #000;
 }
 .error {
   color: red;
