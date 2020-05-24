@@ -24,6 +24,7 @@ export default class FileUpload extends Component {
       exerciseFiles: "",
       fetchedFileURL: "",
       toDownloadFile: true,
+      showFlash:false,
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -34,6 +35,7 @@ export default class FileUpload extends Component {
   }
 
   componentDidMount() {
+    
     axios
       .get(
         process.env.REACT_APP_GRAPH_API_URL +
@@ -205,40 +207,45 @@ export default class FileUpload extends Component {
             // console.log(res.data)
             // console.log(process.env.REACT_APP_GRAPH_API_URL+"sites/"+process.env.REACT_APP_SHARE_POINT_URL+`/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}:/${this.file.name}:/content`);
             // return false;
-
-            axios
-              .put(
-                process.env.REACT_APP_GRAPH_API_URL +
-                  "sites/" +
-                  process.env.REACT_APP_SHARE_POINT_URL +
-                  `/drives/${driveRes.data.value[0].id}/items/${
-                    res.data.value[0].id
-                  }:/${
-                    this.state.studentDetails.displayName.replace("/", "_") +
-                    "_" +
-                    this.file.name
-                  }:/content`,
-                // `https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z4Y4ILBEY3CBVF3WAF26DLAFX7M:/${this.file.name}:/content`,
-                formData,
-                {
-                  headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    "Content-Type": "application/octet-stream",
-                  },
-                }
-              )
-              .then((response) => {
-                // console.log(response.data.@microsoft.graph.downloadUr);
-                this.setState({ fileUploadedName: response.data });
-                this.setState({ fileName: this.file.name });
-                this.fileUploaded = true;
-              })
-              .catch((error) => {
-                console.log(error);
+            if (res.data.value[0]) {
+              axios
+                .put(
+                  process.env.REACT_APP_GRAPH_API_URL +
+                    "sites/" +
+                    process.env.REACT_APP_SHARE_POINT_URL +
+                    `/drives/${driveRes.data.value[0].id}/items/${
+                      res.data.value[0].id
+                    }:/${
+                      this.state.studentDetails.displayName.replace("/", "_") +
+                      "_" +
+                      this.file.name
+                    }:/content`,
+                  // `https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z4Y4ILBEY3CBVF3WAF26DLAFX7M:/${this.file.name}:/content`,
+                  formData,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("token")}`,
+                      "Content-Type": "application/octet-stream",
+                    },
+                  }
+                )
+                .then((response) => {
+                  // console.log(response.data.@microsoft.graph.downloadUr);
+                  this.setState({ fileUploadedName: response.data });
+                  this.setState({ fileName: this.file.name });
+                  this.fileUploaded = true;
+                  this.setState({showFlash:true})
+                  setTimeout(() => {
+                    this.setState({showFlash:false})
+                  }, 3000);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+              this.setState({
+                hideFileUpload: true,
               });
-            this.setState({
-              hideFileUpload: true,
-            });
+            }
           });
       });
   };
@@ -265,14 +272,23 @@ export default class FileUpload extends Component {
             </td>
           </tr>
           {
+            this.state.showFlash ? (
+              <tr>
+              <td colspan="3" className="alert alert-success">
+                File Uploaded Successfully
+              </td>
+              </tr>
+              ) : ("")
+          }
+          {
             this.state.fileUploadedName ? (
             <tr>
-              <td colspan="2">
+              <td className="filelink">
                 {this.state.fileUploadedName
                   ? this.state.fileName
                   : ""}
               </td>
-              <td colspan="2">
+              <td colspan="2" className="filelink icons">
                 {this.state.fileUploadedName ? (
                   <a href={this.state.fileUploadedName.webUrl} target="_blank">
                     <i class="fas fa-eye fa-2x"></i>
