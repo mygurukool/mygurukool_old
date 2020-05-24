@@ -176,7 +176,7 @@ export default class Student extends Component {
 
   displaySubjectIconByName(subjectName, targetId) {
     this.state.subjectIcon = "";
-    if (subjectName === "Maths") {
+    if (subjectName.includes("Math")) {
       this.state.subjectIcon = maths;
     } else if (subjectName === "German") {
       this.state.subjectIcon = maths2;
