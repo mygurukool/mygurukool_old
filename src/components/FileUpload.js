@@ -24,7 +24,7 @@ export default class FileUpload extends Component {
       exerciseFiles: "",
       fetchedFileURL: "",
       toDownloadFile: true,
-      showFlash:false,
+      showFlash: false,
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -35,7 +35,6 @@ export default class FileUpload extends Component {
   }
 
   componentDidMount() {
-    
     axios
       .get(
         process.env.REACT_APP_GRAPH_API_URL +
@@ -114,26 +113,26 @@ export default class FileUpload extends Component {
     }
     return (
       <Fragment>
-          {this.state.toDownloadFile ? (
-            <a href={this.state.fetchedFileURL} target="_blank">
-              <i class="fas fa-eye fa-2x"></i>
-            </a>
-          ) : (
-            ""
-          )}
-          &nbsp;&nbsp;
-          {this.state.toDownloadFile ? (
-            <a
-              href={this.state.fetchedFileURL}
-              target="_blank"
-              //onClick={this.downloadPDF()}
-            >
-              <i class="fas fa-download fa-2x"></i>
-            </a>
-          ) : (
-            ""
-          )}
-          {/* {this.state.exerciseFileObject ? (
+        {this.state.toDownloadFile ? (
+          <a href={this.state.fetchedFileURL} target="_blank">
+            <i class="fas fa-eye fa-2x"></i>
+          </a>
+        ) : (
+          ""
+        )}
+        &nbsp;&nbsp;
+        {this.state.toDownloadFile ? (
+          <a
+            href={this.state.fetchedFileURL}
+            target="_blank"
+            //onClick={this.downloadPDF()}
+          >
+            <i class="fas fa-download fa-2x"></i>
+          </a>
+        ) : (
+          ""
+        )}
+        {/* {this.state.exerciseFileObject ? (
             <a
               href="#?"
               className="btn btn-primary"
@@ -211,11 +210,9 @@ export default class FileUpload extends Component {
               axios
                 .put(
                   process.env.REACT_APP_GRAPH_API_URL +
-                    "sites/" +
-                    process.env.REACT_APP_SHARE_POINT_URL +
-                    `/drives/${driveRes.data.value[0].id}/items/${
-                      res.data.value[0].id
-                    }:/${
+                    `sites/${this.state.groupId}/drives/${
+                      driveRes.data.value[0].id
+                    }/items/${res.data.value[0].id}:/${
                       this.state.studentDetails.displayName.replace("/", "_") +
                       "_" +
                       this.file.name
@@ -234,9 +231,9 @@ export default class FileUpload extends Component {
                   this.setState({ fileUploadedName: response.data });
                   this.setState({ fileName: this.file.name });
                   this.fileUploaded = true;
-                  this.setState({showFlash:true})
+                  this.setState({ showFlash: true });
                   setTimeout(() => {
-                    this.setState({showFlash:false})
+                    this.setState({ showFlash: false });
                   }, 3000);
                 })
                 .catch((error) => {
@@ -258,9 +255,7 @@ export default class FileUpload extends Component {
             <td className="filelink">
               {this.state.exerciseFileName ? this.state.exerciseFileName : ""}
             </td>
-            <td  className="filelink icons">
-              {this.displayFile()}
-            </td>
+            <td className="filelink icons">{this.displayFile()}</td>
             <td class="float-right">
               <a
                 href="#?"
@@ -271,22 +266,19 @@ export default class FileUpload extends Component {
               </a>
             </td>
           </tr>
-          {
-            this.state.showFlash ? (
-              <tr>
+          {this.state.showFlash ? (
+            <tr>
               <td colspan="3" className="alert alert-success">
                 File Uploaded Successfully
               </td>
-              </tr>
-              ) : ("")
-          }
-          {
-            this.state.fileUploadedName ? (
+            </tr>
+          ) : (
+            ""
+          )}
+          {this.state.fileUploadedName ? (
             <tr>
               <td className="filelink">
-                {this.state.fileUploadedName
-                  ? this.state.fileName
-                  : ""}
+                {this.state.fileUploadedName ? this.state.fileName : ""}
               </td>
               <td colspan="2" className="filelink icons">
                 {this.state.fileUploadedName ? (
@@ -298,8 +290,9 @@ export default class FileUpload extends Component {
                 )}
               </td>
             </tr>
-            ) : ''
-          }
+          ) : (
+            ""
+          )}
         </table>
         <div>
           {this.state.hideFileUpload == false ? (
@@ -323,7 +316,8 @@ export default class FileUpload extends Component {
                   className="btn btn-danger"
                 >
                   <i class="far fa-times-circle"></i> Cancel
-                </button> <button
+                </button>{" "}
+                <button
                   type="button"
                   className="btn btn-success upload-btn"
                   onClick={this.handleClick}
@@ -340,14 +334,11 @@ export default class FileUpload extends Component {
               this.state.exerciseFiles.value.map((exe, i) => (
                 <tr>
                   <td className="filename">
-                    {exe.name
-                      .replace(
-                        this.state.studentDetails.displayName.replace(
-                          "/",
-                          "_"
-                        ) + "_",
-                        ""
-                      )}
+                    {exe.name.replace(
+                      this.state.studentDetails.displayName.replace("/", "_") +
+                        "_",
+                      ""
+                    )}
                   </td>
                   <td className="file_icons">
                     <a href={exe.webUrl} target="_blank">
