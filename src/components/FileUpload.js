@@ -171,6 +171,9 @@ export default class FileUpload extends Component {
         this.state.fetchedFileURL = window.URL.createObjectURL(
           new Blob([response.data])
         );
+      })
+      .catch((error) => {
+        console.log("error", error.message);
       });
   }
 
