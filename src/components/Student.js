@@ -297,7 +297,7 @@ export default class Student extends Component {
                               <div className="col-4">
                                 <button
                                   type="button"
-                                  className="btn btn-submit turnin"
+                                  className="btn btn-primary turnin"
                                 >
                                   <i class="fas fa-check"></i> Turn In
                                 </button>

@@ -112,7 +112,6 @@ export default class FileUpload extends Component {
     }
     return (
       <Fragment>
-        <td>
           {this.state.toDownloadFile ? (
             <a href={this.state.fetchedFileURL} target="_blank">
               <i class="fas fa-eye fa-2x"></i>
@@ -120,8 +119,7 @@ export default class FileUpload extends Component {
           ) : (
             ""
           )}
-        </td>
-        <td>
+          &nbsp;&nbsp;
           {this.state.toDownloadFile ? (
             <a
               href={this.state.fetchedFileURL}
@@ -145,7 +143,6 @@ export default class FileUpload extends Component {
           ) : (
             ""
           )} */}
-        </td>
       </Fragment>
     );
   }
@@ -250,11 +247,13 @@ export default class FileUpload extends Component {
     return (
       <Fragment>
         <table class="col-12">
-          <tr className="testing-color-purple col-12">
+          <tr className="testing-color-blue col-12">
             <td className="filelink">
               {this.state.exerciseFileName ? this.state.exerciseFileName : ""}
             </td>
-            <td>{this.displayFile()}</td>
+            <td  className="filelink icons">
+              {this.displayFile()}
+            </td>
             <td class="float-right">
               <a
                 href="#?"
@@ -265,22 +264,26 @@ export default class FileUpload extends Component {
               </a>
             </td>
           </tr>
-          <tr>
-            <td colspan="2">
-              {this.state.fileUploadedName
-                ? this.state.fileName
-                : ""}
-            </td>
-            <td colspan="2">
-              {this.state.fileUploadedName ? (
-                <a href={this.state.fileUploadedName.webUrl} target="_blank">
-                  <i class="fas fa-eye fa-2x"></i>
-                </a>
-              ) : (
-                ""
-              )}
-            </td>
-          </tr>
+          {
+            this.state.fileUploadedName ? (
+            <tr>
+              <td colspan="2">
+                {this.state.fileUploadedName
+                  ? this.state.fileName
+                  : ""}
+              </td>
+              <td colspan="2">
+                {this.state.fileUploadedName ? (
+                  <a href={this.state.fileUploadedName.webUrl} target="_blank">
+                    <i class="fas fa-eye fa-2x"></i>
+                  </a>
+                ) : (
+                  ""
+                )}
+              </td>
+            </tr>
+            ) : ''
+          }
         </table>
         <div>
           {this.state.hideFileUpload == false ? (
@@ -320,7 +323,7 @@ export default class FileUpload extends Component {
             {this.state.exerciseFiles &&
               this.state.exerciseFiles.value.map((exe, i) => (
                 <tr>
-                  <td colspan="2">
+                  <td className="filename">
                     {exe.name
                       .replace(
                         this.state.studentDetails.displayName.replace(
@@ -330,7 +333,7 @@ export default class FileUpload extends Component {
                         ""
                       )}
                   </td>
-                  <td colspan="2">
+                  <td className="file_icons">
                     <a href={exe.webUrl} target="_blank">
                       <i class="fas fa-eye fa-2x"></i>
                     </a>
