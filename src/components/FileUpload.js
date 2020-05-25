@@ -106,44 +106,29 @@ export default class FileUpload extends Component {
     // const toDownloadFile = true;
     if (this.state.exerciseFileLink) {
       this.state.fetchedFileURL = this.state.exerciseFileLink;
-    } else if (this.state.exerciseFileObject) {
-      this.fetchFile(this.state.exerciseFileObject);
-    } else {
-      this.state.toDownloadFile = false;
-    }
+    } 
+    // if (this.state.exerciseFileObject) {
+    //   this.fetchFile(this.state.exerciseFileObject);
+    // } else {
+    //   this.state.toDownloadFile = false;
+    // }
     return (
       <Fragment>
         {this.state.toDownloadFile ? (
-          <a href={this.state.fetchedFileURL} target="_blank">
-            <i class="fas fa-eye fa-2x"></i>
-          </a>
+          // <a href={this.state.fetchedFileURL} target="_blank">
+          //   <i class="fas fa-eye fa-2x"></i>
+          // </a>
+          <a href="#?"><i class="fas fa-eye fa-2x" id={this.state.exerciseFileObject} onClick={this.fetchFile}></i></a>
         ) : (
           ""
         )}
         &nbsp;&nbsp;
         {this.state.toDownloadFile ? (
-          <a
-            href={this.state.fetchedFileURL}
-            target="_blank"
-            //onClick={this.downloadPDF()}
-          >
-            <i class="fas fa-download fa-2x"></i>
-          </a>
+          <a href="#?"><i class="fas fa-download fa-2x" id={this.state.exerciseFileObject} onClick={this.fetchFile}></i></a>
         ) : (
           ""
         )}
-        {/* {this.state.exerciseFileObject ? (
-            <a
-              href="#?"
-              className="btn btn-primary"
-              id={this.state.exerciseFileObject}
-              onClick={this.fetchFile}
-            >
-              <i class="fas fa-download fa-2x"></i>
-            </a>
-          ) : (
-            ""
-          )} */}
+
       </Fragment>
     );
   }
@@ -157,9 +142,11 @@ export default class FileUpload extends Component {
     link.click();
   }
 
-  fetchFile(targetId) {
+  // fetchFile => event(targetId) {
+  fetchFile = (event) => {
+    
     axios
-      .get(targetId, {
+      .get(event.target.id, {
         params: {},
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -168,12 +155,15 @@ export default class FileUpload extends Component {
         responseType: "blob", // important
       })
       .then((response) => {
-        this.state.fetchedFileURL = window.URL.createObjectURL(
-          new Blob([response.data])
-        );
-      })
-      .catch((error) => {
-        console.log("error", error.message);
+        // this.state.fetchedFileURL = window.URL.createObjectURL(
+        //   new Blob([response.data])
+        // );
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'file.pdf');
+        document.body.appendChild(link);
+        link.click();
       });
   }
 
