@@ -22,8 +22,7 @@ export default class FileUpload extends Component {
       studentDetails: props.studentDetails,
       fileName: "",
       exerciseFiles: "",
-      fetchedFileURL: "",
-      toDownloadFile: true,
+      // toDownloadFile: true,
       showFlash: false,
     };
     this.handleFileChange = this.handleFileChange.bind(this);
@@ -104,47 +103,81 @@ export default class FileUpload extends Component {
 
   displayFile() {
     // const toDownloadFile = true;
-    if (this.state.exerciseFileLink) {
-      this.state.fetchedFileURL = this.state.exerciseFileLink;
-    } 
+    // if (this.state.exerciseFileLink) {
+    //   this.state.fetchedFileURL = this.state.exerciseFileLink;
+    // }
     // if (this.state.exerciseFileObject) {
     //   this.fetchFile(this.state.exerciseFileObject);
     // } else {
     //   this.state.toDownloadFile = false;
     // }
+    // <a href={this.state.fetchedFileURL} target="_blank">
+    //   <i class="fas fa-eye fa-2x"></i>
+    // </a>
+
     return (
       <Fragment>
-        {this.state.toDownloadFile ? (
-          // <a href={this.state.fetchedFileURL} target="_blank">
-          //   <i class="fas fa-eye fa-2x"></i>
-          // </a>
-          <a href="#?"><i class="fas fa-eye fa-2x" id={this.state.exerciseFileObject} onClick={this.fetchFile}></i></a>
+        {/*Start: PDF is of Type BLOB */}
+        {this.state.exerciseFileObject ? (
+          <a href="#?">
+            <i
+              class="fas fa-eye fa-2x"
+              id={this.state.exerciseFileObject}
+              onClick={this.fetchFile}
+            ></i>
+          </a>
         ) : (
           ""
         )}
         &nbsp;&nbsp;
-        {this.state.toDownloadFile ? (
-          <a href="#?"><i class="fas fa-download fa-2x" id={this.state.exerciseFileObject} onClick={this.fetchFile}></i></a>
+        {this.state.exerciseFileObject ? (
+          <a href="#?">
+            <i
+              class="fas fa-download fa-2x"
+              id={this.state.exerciseFileObject}
+              onClick={this.fetchFile}
+            ></i>
+          </a>
         ) : (
           ""
         )}
-
+        {/*End: PDF is of Type BLOB */}
+        {/*Start: PDF is of Type WebLink */}
+        {this.state.exerciseFileLink ? (
+          <a href={this.state.exerciseFileLink} target="_blank">
+            <i class="fas fa-eye fa-2x"></i>
+          </a>
+        ) : (
+          ""
+        )}
+        &nbsp;&nbsp;
+        {this.state.exerciseFileLink ? (
+          <a href={this.state.exerciseFileLink} target="_blank">
+            <i
+              class="fas fa-download fa-2x"
+              // id={this.state.exerciseFileLink}
+              // onClick={this.downloadPDF}
+            ></i>
+          </a>
+        ) : (
+          ""
+        )}
+        {/*Start: PDF is of Type WebLink */}
       </Fragment>
     );
   }
 
-  downloadPDF() {
-    alert("download file");
+  downloadPDF = (event) => {
+    alert("download fileww");
     const link = document.createElement("a");
-    link.href = this.state.fetchedFileURL;
-    link.setAttribute("download", this.state.exerciseFileName); //or any other extension
+    link.href = event.target.id;
+    link.setAttribute("download", this.state.exerciseFileName);
     document.body.appendChild(link);
     link.click();
-  }
+  };
 
   // fetchFile => event(targetId) {
   fetchFile = (event) => {
-    
     axios
       .get(event.target.id, {
         params: {},
@@ -155,17 +188,14 @@ export default class FileUpload extends Component {
         responseType: "blob", // important
       })
       .then((response) => {
-        // this.state.fetchedFileURL = window.URL.createObjectURL(
-        //   new Blob([response.data])
-        // );
         const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', 'file.pdf');
+        link.setAttribute("download", this.state.exerciseFileName);
         document.body.appendChild(link);
         link.click();
       });
-  }
+  };
 
   handleClick = (event) => {
     const formData = new FormData();
