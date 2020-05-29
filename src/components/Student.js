@@ -15,6 +15,7 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
+import AudioVideo from "./AudioVideo";
 import Video from "./Video";
 import maths from "./../assets/maths.gif";
 import maths2 from "./../assets/maths2.png";
@@ -65,6 +66,7 @@ export default class Student extends Component {
       vidId: "",
       exerciseTitle: "",
       groupDetails: "",
+      groupName: "",
       subjectIcon: "",
     };
 
@@ -80,25 +82,31 @@ export default class Student extends Component {
       localStorage.setItem("token", this.props.match.params.token);
     }
     this.state.isLoading = true;
+    //Fetch user Profile
     this.axiosCall(
-      process.env.REACT_APP_GRAPH_API_URL +
-        "sites/root:/sites/" +
-        process.env.REACT_APP_SCHOOL_PROJECT_NAME
+      // "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
+      process.env.REACT_APP_GRAPH_API_URL_BETA + "/me"
     ).then((response) => {
-      this.setState({ groupDetails: response.data });
+      this.setState({
+        studentData: response.data,
+      });
+      this.setState({
+        displayName: this.state.studentData.displayName.replace("/", " "),
+        groupName: this.state.studentData.department,
+      });
+      alert("group name" + this.state.groupName);
+      localStorage.setItem(
+        "studentName",
+        this.state.studentData.displayName.replace("/", "_")
+      );
 
       this.axiosCall(
-        // "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
-        process.env.REACT_APP_GRAPH_API_URL + "/me"
+        process.env.REACT_APP_GRAPH_API_URL +
+          "sites/root:/sites/" +
+          this.state.groupName
       ).then((response) => {
-        this.setState({ studentData: response.data });
-        this.setState({
-          displayName: this.state.studentData.displayName.replace("/", " "),
-        });
-        localStorage.setItem(
-          "studentName",
-          this.state.studentData.displayName.replace("/", "_")
-        );
+        this.setState({ groupDetails: response.data });
+
         this.axiosCall(
           // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
           process.env.REACT_APP_GRAPH_API_URL +
@@ -120,9 +128,10 @@ export default class Student extends Component {
               this.setState({
                 currentView: this.state.sections.value[0].displayName,
               });
-              this.setState({ exercise: response.data });
-              // console.log(this.state.exercise);
-              this.setState({ exercisedata: this.state.exercise });
+              this.setState({
+                exercise: response.data,
+                exercisedata: this.state.exercise,
+              });
             });
           }
         });
@@ -143,6 +152,18 @@ export default class Student extends Component {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
   }
+
+  handleNotebook = (event) => {
+    return (
+      <iframe
+        width="500"
+        height="200"
+        frameborder="0"
+        scrolling="no"
+        src="https://something.sharepoint.com/personal/something/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
+      ></iframe>
+    );
+  };
 
   handleClick = (event) => {
     this.setState({ currentView: event.target.text });
@@ -245,6 +266,30 @@ export default class Student extends Component {
                         </a>
                       </li>
                     ))}
+                  {/* Embed OneNote */}
+                  {/* <li className="nav-item">
+                    <a
+                      className={"nav-link"}
+                      id={"oneNote"}
+                      data-toggle="pill"
+                      href="#?"
+                      onClick={this.handleNotebook}
+                    > */}
+                  {/* Exercise Name */}
+                  {/* Notebook
+                  <div>
+                        <iframe
+                          width="500"
+                          height="200"
+                          frameborder="0"
+                          scrolling="no"
+                          src="https://something.sharepoint.com/personal/something/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
+                        ></iframe>
+                      </div> */}
+                  {/* <br />
+                      {this.displaySubjectIconByName(key.displayName, key.id)} */}
+                  {/* </a>
+                  </li> */}
                 </ul>
               </div>
             </div>
@@ -303,6 +348,13 @@ export default class Student extends Component {
                                 </button>
                               </div>
                               <div className="col-12">
+                                {/* {exe.content ? (
+                                  <AudioVideo
+                                    vidUrl={exe.content.youtubelink}
+                                  />
+                                ) : (
+                                  ""
+                                )} */}
                                 <b>Exercise Video Explanation</b>
                                 <ul>
                                   {exe.content && exe.content.youtubelink ? (
